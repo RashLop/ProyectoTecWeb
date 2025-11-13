@@ -4,9 +4,9 @@ namespace ProyectoTecWeb.Models.DTO
 {
     public record LoginUserDto
     {
-        [Required, DataType(DataType.EmailAddress), EmailAddress]
-        string? Email { get; init; }
-        [Required, MaxLength(25), MinLength(8)]
-        string? Password { get; init; }
+        [DataType(DataType.EmailAddress), EmailAddress]
+        public required string Email { get; init; }
+        [MaxLength(25), MinLength(8)]
+        public required string Password { get; init; }
     }
 }
