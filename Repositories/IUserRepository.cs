@@ -8,5 +8,7 @@ namespace ProyectoTecWeb.Repository
         Task<User?> GetByEmailAddress(string email); 
         Task AddAsync(User user); 
         Task UpdateAsync(User user); 
+
+        Task<User?> GetByRefreshToken(string refreshToken); 
     }
 }

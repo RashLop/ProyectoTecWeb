@@ -18,7 +18,7 @@ namespace ProyectoTecWeb.Data
                 u.HasKey(u => u.Id);
                 u.Property(u => u.Email).IsRequired();
                 u.Property(u => u.Password).IsRequired();
-                u.Property(u => u.Name).IsRequired(); 
+                u.Property(u => u.UserName).IsRequired(); 
                 u.Property(u => u.Phone).IsRequired().HasMaxLength(8);
                 u.Property(u => u.Role).IsRequired().HasDefaultValue("User");
                 u.HasIndex(u => u.Email).IsUnique(); 

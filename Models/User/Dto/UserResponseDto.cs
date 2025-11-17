@@ -1,6 +1,6 @@
 namespace ProyectoTecWeb.Models.DTO
 {
-    public class UserResponse
+    public class UserResponseDto
     {
         public Guid id { get; set; }
         public required string Username { get; set; }
