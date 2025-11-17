@@ -2,6 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoTecWeb.Models.DTO;
 using ProyectoTecWeb.Serivces;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Security.Controllers
 {
@@ -37,6 +39,7 @@ namespace Security.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {

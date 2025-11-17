@@ -7,6 +7,7 @@ using ProyectoTecWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using ProyectoTecWeb.Serivces;
 using ProyectoTecWeb.Repository;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -21,7 +22,8 @@ builder.Services.AddOpenApi();
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-var keyBytes = Convert.FromBase64String(jwtKey!);
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey!);
+
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
