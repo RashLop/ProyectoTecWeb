@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoTecWeb.Models.DTO;
-using ProyectoTecWeb.Serivces;
+using ProyectoTecWeb.Services;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 

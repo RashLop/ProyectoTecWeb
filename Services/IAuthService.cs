@@ -1,6 +1,6 @@
 using ProyectoTecWeb.Models.DTO;
 
-namespace ProyectoTecWeb.Serivces
+namespace ProyectoTecWeb.Services
 {
     public interface IAuthService
     {

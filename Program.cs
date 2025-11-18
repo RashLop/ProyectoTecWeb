@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using DotNetEnv;
 using ProyectoTecWeb.Data;
 using Microsoft.EntityFrameworkCore;
-using ProyectoTecWeb.Serivces;
+using ProyectoTecWeb.Services;
 using ProyectoTecWeb.Repository;
 using System.Text;
 

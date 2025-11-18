@@ -9,7 +9,7 @@ using ProyectoTecWeb.Models;
 using ProyectoTecWeb.Models.DTO;
 using ProyectoTecWeb.Repository;
 using Sprache;
-namespace ProyectoTecWeb.Serivces
+namespace ProyectoTecWeb.Services
 {
     public class AuthService : IAuthService
     {
