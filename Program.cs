@@ -1,4 +1,3 @@
-
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +9,12 @@ using ProyectoTecWeb.Repository;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-Env.Load();
+var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"https://0.0.0.0:{port}"); 
+}
+Env.Load();   
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");

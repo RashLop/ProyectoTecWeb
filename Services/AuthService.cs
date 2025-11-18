@@ -1,3 +1,4 @@
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProyectoTecWeb.Models;
 using ProyectoTecWeb.Models.DTO;
 using ProyectoTecWeb.Repository;
+using Sprache;
 namespace ProyectoTecWeb.Serivces
 {
     public class AuthService : IAuthService
@@ -65,17 +67,17 @@ namespace ProyectoTecWeb.Serivces
         {
             // Buscar usuario que tenga ese refresh token (simple)
             var user = await _users.GetByRefreshToken(dto.RefreshToken);
-            if (user == null) return (false, null);
+            if (user == null) throw new ArgumentException("User not found");  
 
             // Validaciones de refresh
-            if (user.RefreshToken != dto.RefreshToken) return (false, null);
-            if (user.RefreshTokenRevokedAt.HasValue) return (false, null);
-            if (!user.RefreshTokenExpiresAt.HasValue || user.RefreshTokenExpiresAt.Value < DateTime.UtcNow) return (false, null);
+            if (user.RefreshToken != dto.RefreshToken) throw new ArgumentException("invalid refresh token"); 
+            if (user.RefreshTokenRevokedAt.HasValue) throw new ArgumentException("refresh token used"); 
+            if (!user.RefreshTokenExpiresAt.HasValue || user.RefreshTokenExpiresAt.Value < DateTime.UtcNow) throw new ArgumentException("refresh token used"); 
 
             // Rotación: generar nuevo access + refresh y revocar el anterior
             var (accessToken, expiresIn, jti) = GenerateJwtToken(user);
             var newRefresh = GenerateSecureRefreshToken();
-            var refreshDays = int.Parse(_confi["Jwt:RefreshDays"] ?? "14");
+            var refreshDays = int.Parse(Environment.GetEnvironmentVariable("JWT_REFRESH") !);  
 
             user.RefreshToken = newRefresh;
             user.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(refreshDays);
@@ -96,11 +98,11 @@ namespace ProyectoTecWeb.Serivces
 
         private (string token, int expiresInSeconds, string jti) GenerateJwtToken(User user)
         {
-            var jwtSection = _confi.GetSection("Jwt");
-            var key = jwtSection["Key"]!;
-            var issuer = jwtSection["Issuer"];
-            var audience = jwtSection["Audience"];
-            var expireMinutes = int.Parse(jwtSection["ExpiresMinutes"]?? "60"); 
+            var jwtSection = _confi.GetSection("Jwt"); 
+            var key = Environment.GetEnvironmentVariable("JWT_KEY")!; 
+            var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+            var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"); 
+            var expireMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRES")!); 
 
             var jti = Guid.NewGuid().ToString(); 
 
@@ -140,8 +142,7 @@ namespace ProyectoTecWeb.Serivces
         {
             var user = await _users.GetByEmailAddress(email);
 
-            if (user is null) 
-                throw new ArgumentException("User not found");
+            if (user is null) throw new ArgumentException("User not found");
 
             user.RefreshToken = null;
             user.RefreshTokenExpiresAt = null;
