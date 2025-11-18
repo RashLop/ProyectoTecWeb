@@ -16,5 +16,8 @@ namespace ProyectoTecWeb.Models
         public DateTime? RefreshTokenRevokedAt { get; set; }
         public string? CurrentJwtId { get; set; }
 
+        //Relaciones
+        //public Doctor? doctor {get; set ;}
+
     }
 }
