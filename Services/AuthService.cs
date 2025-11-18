@@ -96,10 +96,10 @@ namespace ProyectoTecWeb.Serivces
 
         private (string token, int expiresInSeconds, string jti) GenerateJwtToken(User user)
         {
-            var jwtSection = _confi.GetSection("Jwt"); 
-            var key = Environment.GetEnvironmentVariable("JWT_KEY")!; 
-            var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
-            var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"); 
+            var jwtSection = _confi.GetSection("Jwt");
+            var key = jwtSection["Key"]!;
+            var issuer = jwtSection["Issuer"];
+            var audience = jwtSection["Audience"];
             var expireMinutes = int.Parse(jwtSection["ExpiresMinutes"]?? "60"); 
 
             var jti = Guid.NewGuid().ToString(); 
