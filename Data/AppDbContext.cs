@@ -9,6 +9,7 @@ namespace ProyectoTecWeb.Data
         public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 
         public DbSet<User> users => Set<User>();
+        public DbSet<Appointment> appointments => Set<Appointment>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
