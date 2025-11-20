@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,14 @@ namespace ProyectoTecWeb.Controllers
             if(!ModelState.IsValid) return ValidationProblem(ModelState); 
             var Update = await _doc.UpdateDoctor(dto, id); 
             return CreatedAtAction(nameof(GetOneDoctor), new {id = Update.DoctorId}, Update); 
+        }
+
+        [Authorize(Policy = "AdminOnly")]
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _doc.Delete(id); 
+            return NoContent(); 
         }
     }
     
