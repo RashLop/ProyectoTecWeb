@@ -1,11 +1,16 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using DotNetEnv;
-using ProyectoTecWeb.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
 using ProyectoTecWeb.Services;
+=======
+using Microsoft.IdentityModel.Tokens;
+using ProyectoTecWeb.Data;
+>>>>>>> feat/citas
 using ProyectoTecWeb.Repository;
+using ProyectoTecWeb.Serivces;
+using ProyectoTecWeb.Services;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,8 +76,13 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(conectionString));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+<<<<<<< HEAD
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+=======
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+>>>>>>> feat/citas
 
 var app = builder.Build();
 

@@ -10,7 +10,11 @@ namespace ProyectoTecWeb.Data
         public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 
         public DbSet<User> users => Set<User>();
+<<<<<<< HEAD
         public DbSet<Doctor> doctors => Set<Doctor>(); 
+=======
+        public DbSet<Appointment> appointments => Set<Appointment>();
+>>>>>>> feat/citas
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +28,7 @@ namespace ProyectoTecWeb.Data
                 u.Property(u => u.Phone).IsRequired().HasMaxLength(8);
                 u.Property(u => u.Role).IsRequired().HasDefaultValue("User");
                 u.HasIndex(u => u.Email).IsUnique(); 
+<<<<<<< HEAD
             }); 
 
             modelBuilder.Entity<Doctor>(d =>
@@ -36,6 +41,17 @@ namespace ProyectoTecWeb.Data
                 .WithOne().HasForeignKey<Doctor>(u => u.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
             }); 
+=======
+            });
+
+
+            modelBuilder.Entity<Appointment>(a =>
+            {
+                a.HasKey(a => a.AppointmentId);
+                a.Property(a => a.Reason).IsRequired().HasMaxLength(200);
+                a.Property(a => a.Status).IsRequired();
+            });
+>>>>>>> feat/citas
         }
     }
 }
