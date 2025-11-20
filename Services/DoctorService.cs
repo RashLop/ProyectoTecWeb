@@ -64,5 +64,12 @@ namespace ProyectoTecWeb.Services
             await _repo.UpadteAsync(doctor); 
             return doctor; 
         }
+
+        public async Task Delete(Guid id)
+        {
+            var deleted = await _repo.GetDoctor(id); 
+            if(deleted is null) throw new ArgumentException("Doctor not found"); 
+            await _repo.DeleteAsync(deleted); 
+        }
     }
 }

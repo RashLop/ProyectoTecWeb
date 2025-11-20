@@ -13,5 +13,7 @@ namespace ProyectoTecWeb.Services
 
         Task<Doctor> UpdateDoctor(UpdateDoctorDto dto, Guid id); 
 
+        Task Delete (Guid id); 
+
     }
 }
