@@ -1,37 +1,30 @@
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< HEAD
-using ProyectoTecWeb.Services;
-=======
 using Microsoft.IdentityModel.Tokens;
 using ProyectoTecWeb.Data;
->>>>>>> feat/citas
 using ProyectoTecWeb.Repository;
-using ProyectoTecWeb.Serivces;
 using ProyectoTecWeb.Services;
 using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
 if (!string.IsNullOrEmpty(port))
 {
-    builder.WebHost.UseUrls($"https://0.0.0.0:{port}"); 
+    builder.WebHost.UseUrls($"https://0.0.0.0:{port}");
 }
-Env.Load();   
+
+Env.Load();
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey!);
 
-//var port = Environment.get
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -61,28 +54,28 @@ builder.Services
             ClockSkew = TimeSpan.Zero
         };
     });
+
 var dbName = Environment.GetEnvironmentVariable("POSTGRES_DB");
 var dbUser = Environment.GetEnvironmentVariable("POSTGRES_USER");
 var dbPass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
 var dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
-var host = Environment.GetEnvironmentVariable("DATABASE_HOST"); 
-var conectionString = $"Host={host};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}"; 
+var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
+var conectionString = $"Host={host};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
 });
+
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(conectionString));
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-=======
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
->>>>>>> feat/citas
 
 var app = builder.Build();
 
@@ -91,12 +84,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-if (builder.Environment.IsDevelopment())
-{
-    app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
+    app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = "swagger";
