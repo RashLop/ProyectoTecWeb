@@ -5,7 +5,7 @@ using ProyectoTecWeb.Services;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Security.Controllers
+namespace ProyectoTecWeb.Controllers
 {
     [ApiController]
     [Route("api/v1/[Controller]")]

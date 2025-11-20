@@ -33,7 +33,8 @@ namespace ProyectoTecWeb.Data
                 d.Property(d => d.Phone).IsRequired().HasMaxLength(50); 
                 d.Property(d => d.Specialty).IsRequired().HasMaxLength(100);
                 d.HasOne( u => u.user)
-                .WithMany().HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
+                .WithOne().HasForeignKey<Doctor>(u => u.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             }); 
         }
     }

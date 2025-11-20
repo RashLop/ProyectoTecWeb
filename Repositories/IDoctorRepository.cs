@@ -8,7 +8,7 @@ namespace ProyectoTecWeb.Repository
         Task AddAsync(Doctor doctor); 
         Task UpadteAsync(Doctor doctor); 
         Task DeleteAsync(Doctor doctor); 
-        Task<IEnumerable<Doctor?>> GetAllDoctorsAsync(); 
+        Task<IEnumerable<Doctor>> GetAllDoctorsAsync(); 
 
         Task SaveChangesAsync(); 
     }

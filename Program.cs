@@ -71,6 +71,9 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(conectionString));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

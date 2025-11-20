@@ -6,9 +6,12 @@ namespace ProyectoTecWeb.Services
 {
     public interface IDoctorService
     {
-        Task<Doctor?> GetOneDoctor(Guid id); 
-        Task<IEnumerable<Doctor?>> GetAllDoctors(); 
+        Task<DoctorResponse> GetOneDoctor(Guid id); 
+        Task<IEnumerable<DoctorResponse>> GetAllDoctors(); 
 
-        Task<Doctor?> CreateDoctor(CreateDoctorDto dto); 
+        Task<Doctor> CreateDoctor(CreateDoctorDto dto); 
+
+        Task<Doctor> UpdateDoctor(UpdateDoctorDto dto, Guid id); 
+
     }
 }
