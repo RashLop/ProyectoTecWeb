@@ -23,7 +23,15 @@ namespace ProyectoTecWeb.Data
                 u.Property(u => u.Phone).IsRequired().HasMaxLength(8);
                 u.Property(u => u.Role).IsRequired().HasDefaultValue("User");
                 u.HasIndex(u => u.Email).IsUnique(); 
-            }); 
+            });
+
+
+            modelBuilder.Entity<Appointment>(a =>
+            {
+                a.HasKey(a => a.AppointmentId);
+                a.Property(a => a.Reason).IsRequired().HasMaxLength(200);
+                a.Property(a => a.Status).IsRequired();
+            });
         }
     }
 }

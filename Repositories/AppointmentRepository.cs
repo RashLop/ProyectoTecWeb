@@ -4,9 +4,23 @@ using ProyectoTecWeb.Models;
 
 namespace ProyectoTecWeb.Repository
 {
-    public class AppointmentRepository(AppDbContext ctx) : IAppointmentRepository
+    public class AppointmentRepository : IAppointmentRepository
     {
-        private readonly AppDbContext _ctx = ctx;
+        private readonly AppDbContext _ctx;
+        public AppointmentRepository(AppDbContext ctx)
+        {
+            _ctx = ctx;
+        }
+
+        public async Task AddAsync(Appointment appointment)
+        {
+            await _ctx.appointments.AddAsync(appointment);
+        }
+
+        public async Task<Appointment?> GetOneAsync(Guid id)
+        {
+            return await _ctx.appointments.FirstOrDefaultAsync(a => a.AppointmentId == id);
+        }
 
         public async Task<IEnumerable<Appointment>> GetAllAsync()
         {
@@ -14,12 +28,6 @@ namespace ProyectoTecWeb.Repository
                 .OrderBy(a => a.Date)
                 .ThenBy(a => a.Time)
                 .ToListAsync();
-        }
-
-        public async Task<Appointment?> GetOneAsync(Guid id)
-        {
-            return await _ctx.appointments
-                .FirstOrDefaultAsync(a => a.AppointmentId == id);
         }
 
         public async Task<IEnumerable<Appointment>> GetByDoctorAsync(Guid doctorId)
@@ -38,11 +46,6 @@ namespace ProyectoTecWeb.Repository
                 .OrderBy(a => a.Date)
                 .ThenBy(a => a.Time)
                 .ToListAsync();
-        }
-
-        public async Task AddAsync(Appointment appointment)
-        {
-            await _ctx.appointments.AddAsync(appointment);
         }
 
         public async Task UpdateAsync(Appointment appointment)

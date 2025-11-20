@@ -1,11 +1,12 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using DotNetEnv;
-using ProyectoTecWeb.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using ProyectoTecWeb.Serivces;
+using Microsoft.IdentityModel.Tokens;
+using ProyectoTecWeb.Data;
 using ProyectoTecWeb.Repository;
+using ProyectoTecWeb.Serivces;
+using ProyectoTecWeb.Services;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,6 +72,9 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(conectionString));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
