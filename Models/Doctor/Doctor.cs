@@ -9,5 +9,8 @@ namespace ProyectoTecWeb.Models
         public string Phone {get; set; } = string.Empty; 
         public string Specialty {get; set; } = string.Empty;
 
+        public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>(); 
+
+
     }
 }
