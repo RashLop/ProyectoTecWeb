@@ -31,7 +31,7 @@ TestResult*/
 *.log
 
 #migrations
-#Migrations/
+Migrations/
 "@ | Out-File -Encoding utf8 .gitignore
 
 #env variables 
