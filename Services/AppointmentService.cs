@@ -23,8 +23,7 @@ namespace ProyectoTecWeb.Services
                 Date = dto.Date.Date,
                 Time = dto.Time,
                 Reason = dto.Reason,
-                Status = 0,
-                CreatedAt = DateTime.UtcNow
+                Status = 0
             };
 
             await _repo.AddAsync(appointment);
@@ -95,7 +94,6 @@ namespace ProyectoTecWeb.Services
                 Reason = a.Reason,
                 Status = a.Status,
                 Notes = a.Notes,
-                CreatedAt = a.CreatedAt
             };
         }
     }

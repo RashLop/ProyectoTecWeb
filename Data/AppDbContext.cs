@@ -44,7 +44,7 @@ namespace ProyectoTecWeb.Data
                 a.HasKey(a => a.AppointmentId);
                 a.Property(a => a.Reason).IsRequired().HasMaxLength(200);
                 a.Property(a => a.Status).IsRequired();
-                a.HasOne(d => d.doctor)
+                a.HasOne(d => d.Doctor)
                     .WithMany(d => d.Appointments)
                     .HasForeignKey(a => a.DoctorId)
                     .OnDelete(DeleteBehavior.Cascade);
