@@ -106,6 +106,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+
+    app.UseHttpsRedirection();
+}
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI(options =>
@@ -113,9 +116,6 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = "swagger";
     });
-    app.UseHttpsRedirection();
-}
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
