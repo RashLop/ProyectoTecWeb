@@ -10,10 +10,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+var port = Environment.GetEnvironmentVariable("PORT");
 if (!string.IsNullOrEmpty(port))
 {
-    builder.WebHost.UseUrls($"https://0.0.0.0:{port}");
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 }
 
 Env.Load();
