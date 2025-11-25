@@ -2,6 +2,7 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using ProyectoTecWeb.Data;
 using ProyectoTecWeb.Repository;
 using ProyectoTecWeb.Services;
@@ -9,14 +10,14 @@ using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Env.Load();
 var port = Environment.GetEnvironmentVariable("PORT");
 if (!string.IsNullOrEmpty(port))
 {
     builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 }
 
-Env.Load();
+
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
@@ -54,21 +55,44 @@ builder.Services
             ClockSkew = TimeSpan.Zero
         };
     });
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL"); 
+if (!string.IsNullOrEmpty(connectionString)&&
+    (connectionString.StartsWith("postgres://") || connectionString.StartsWith("postgresql://"))){
+    // 
+        var uri = new Uri(connectionString);
 
-var dbName = Environment.GetEnvironmentVariable("POSTGRES_DB");
-var dbUser = Environment.GetEnvironmentVariable("POSTGRES_USER");
-var dbPass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
-var dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
-var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
-var conectionString = $"Host={host};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var user = Uri.UnescapeDataString(userInfo[0]);
+    var pass = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
 
+    var builderCs = new NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.Port,
+        Username = user,
+        Password = pass,
+        Database = uri.AbsolutePath.Trim('/'),
+        SslMode = SslMode.Require,
+    };
+    connectionString = builderCs.ConnectionString;
+    }
+
+if(string.IsNullOrEmpty(connectionString)){
+    var dbName = Environment.GetEnvironmentVariable("POSTGRES_DB");
+    var dbUser = Environment.GetEnvironmentVariable("POSTGRES_USER");
+    var dbPass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+    var dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+    var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
+
+    connectionString = $"Host={host};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
+}
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
 });
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseNpgsql(conectionString));
+    opt.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -89,9 +113,8 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = "swagger";
     });
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
