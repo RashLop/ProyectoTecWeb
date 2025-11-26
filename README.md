@@ -79,3 +79,31 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 - Relación 1:1 con `Doctor`  
 
 ---
+##  3. Diagrama ER
+
+Basado en el modelo diseñado para **Salud Total**:
+
+### Entidades y Atributos
+
+| Entidad         | Atributos Principales                                                       | Descripción                                  |
+|-----------------|-----------------------------------------------------------------------------|----------------------------------------------|
+| **User**        | Id, Username, Password, Email, Phone, Role                                  | Credenciales del sistema                     |
+| **Doctor**      | DoctorId, UserId, Name, Specialty, Phone                                    | Información del médico                       |
+| **Patient**     | PatientId, UserId, Name, Phone                                              | Datos del paciente                           |
+| **Appointment** | AppointmentId, DoctorId, PatientId, Date, Time, Reason, Status, Notes       | Cita médica (turno)                          |
+| **Diagnostic**  | PatientId (PK), Exams, Treatment                                            | Diagnóstico del paciente                     |
+| **Consultorio** | ConsultorioId, ConsultorioName, Address, Equipment                          | Consultorio asignado a un doctor             |
+
+### Relaciones
+
+- **User – Doctor:** 1:1  
+- **User – Patient:** 1:1  
+- **Doctor – Appointment:** 1:N  
+- **Patient – Appointment:** 1:N  
+- **Doctor – Patient:** N:M **a través de Appointment**  
+- **Patient – Diagnóstico:** 1:1  
+- **Doctor – Consultorio:** 1:1  
+
+---
+
+
