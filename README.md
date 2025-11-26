@@ -22,6 +22,7 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 | **Data**       | Contiene el `AppDbContext` y configuración de la BD.           |
 | **DTOs**       | Modelos para transferencia de datos entre capa y capa.         |
 
+---
 ##  2. Funcionalidades del Sistema
 
 ###  Gestión de Autenticación (Auth)
@@ -125,3 +126,27 @@ Roles disponibles
 Admin → Acceso total (CRUD y administración general)
 
 User → Lectura y operaciones básicas permitidas
+
+---
+
+##  5. EndPoints Principales
+
+
+---
+
+##  6. Swagger Documentation
+
+El proyecto incluye documentación interactiva con Swagger.
+
+ URL por defecto:
+```
+http://localhost:5020/swagger
+```
+
+Desde ahí se pueden:
+
+- Probar endpoints
+
+- Ver modelos y respuestas
+
+- Autorizar con JWT (botón Authorize)
