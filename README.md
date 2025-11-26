@@ -106,4 +106,22 @@ Basado en el modelo diseñado para **Salud Total**:
 
 ---
 
+##  4. Autenticación y Autorización (JWT)
 
+El sistema implementa autenticación mediante **JSON Web Tokens**:
+
+### Flujo:
+
+1. El usuario envía email + contraseña  
+2. La API valida credenciales  
+3. Devuelve **AccessToken** y **RefreshToken**  
+4. El token se envía en cada request protegida:
+
+```http
+Authorization: Bearer <token>
+```
+Roles disponibles
+
+Admin → Acceso total (CRUD y administración general)
+
+User → Lectura y operaciones básicas permitidas
