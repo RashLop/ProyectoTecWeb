@@ -23,6 +23,7 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 | **DTOs**       | Modelos para transferencia de datos entre capa y capa.         |
 
 ---
+
 ##  2. Funcionalidades del Sistema
 
 ###  Gestión de Autenticación (Auth)
@@ -80,6 +81,7 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 - Relación 1:1 con `Doctor`  
 
 ---
+
 ##  3. Diagrama ER
 
 Basado en el modelo diseñado para **Salud Total**:
@@ -150,3 +152,64 @@ Desde ahí se pueden:
 - Ver modelos y respuestas
 
 - Autorizar con JWT (botón Authorize)
+
+---
+
+##  7. Instalación y Configuración
+Requisitos
+
+- .NET 9 SDK
+
+- PostgreSQL (o Docker)
+
+- Postman (recomendado para pruebas)
+
+**1. Clonar repositorio**
+```
+git clone https://github.com/RashLop/ProyectoTecWeb.git
+
+cd ProyectoTecWeb
+```
+**2. Configurar archivo .env**
+
+Ejemplo:
+```
+DATABASE_HOST=localhost
+POSTGRES_DB=Hospitaldb
+POSTGRES_USER=Hospitaluser
+POSTGRES_PASSWORD=supersecret
+POSTGRES_PORT=5432
+
+JWT_KEY=CLAVE_SUPER_SECRETA
+JWT_ISSUER=MiApi
+JWT_AUDIENCE=MiCliente
+JWT_EXPIRES=60
+JWT_REFRESH=14
+```
+**3. Levantar PostgreSQL con Docker**
+```
+docker run --name hospitaldb -e POSTGRES_DB=Hospitaldb -e POSTGRES_USER=Hospitaluser -e POSTGRES_PASSWORD=supersecret -p 5432:5432 -d postgres:16
+```
+**4. Ejecutar la API**
+```
+dotnet run
+```
+La API estará disponible en:
+```
+http://localhost:5020
+```
+
+---
+
+## 📦 8. Datos de Prueba (Demo)
+
+| Email           | Password   | Rol  |
+|-----------------|-----------|-------|
+| admin@gmail.com | P@ssw0rd  | Admin |
+| user@gmail.com  | User1234  | User  |
+
+---
+
+## 🧪 9. Pruebas en Postman
+
+
