@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using ProyectoTecWeb.Models;
+using ProyectoTecWeb.Models.Patient;
 
 namespace ProyectoTecWeb.Data
 {
@@ -11,6 +12,8 @@ namespace ProyectoTecWeb.Data
         public DbSet<User> users => Set<User>();
         public DbSet<Doctor> doctors => Set<Doctor>();
         public DbSet<Appointment> appointments => Set<Appointment>();
+
+        public DbSet<Patient> patients => Set<Patient>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +51,28 @@ namespace ProyectoTecWeb.Data
                     .WithMany(d => d.Appointments)
                     .HasForeignKey(a => a.DoctorId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<Appointment>(a =>
+            {
+                a.HasKey(a => a.AppointmentId);
+
+                a.Property(a => a.Date).IsRequired();
+                a.Property(a => a.Time).IsRequired();
+                a.Property(a => a.Reason).IsRequired().HasMaxLength(200);
+                a.Property(a => a.Status).IsRequired().HasDefaultValue(0);
+                a.Property(a => a.Notes).HasMaxLength(500);
+
+                // Relación: Appointment -> Doctor
+                a.HasOne(a => a.Doctor)
+                    .WithMany(d => d.Appointments)
+                    .HasForeignKey(a => a.DoctorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Relación: Appointment -> Patient
+                a.HasOne(a => a.Patient)
+                    .WithMany(p => p.Appointments)
+                    .HasForeignKey(a => a.PatientId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

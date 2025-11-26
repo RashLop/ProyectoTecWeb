@@ -4,6 +4,7 @@ namespace ProyectoTecWeb.Models.DTO
 {
     public record UpdateDoctorDto
     {
+        [Required, StringLength(100)]
         public required string Name {get; init; } 
         [Required, MinLength(8), MaxLength(8)]
 

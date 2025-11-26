@@ -1,5 +1,6 @@
 ﻿using ProyectoTecWeb.Models;
 using ProyectoTecWeb.Models.DTO;
+using ProyectoTecWeb.Models.Patient;
 using ProyectoTecWeb.Repository;
 
 namespace ProyectoTecWeb.Services

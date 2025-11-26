@@ -1,20 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProyectoTecWeb.Data;
 using ProyectoTecWeb.Models;
+using ProyectoTecWeb.Models.Patient;
 
 namespace ProyectoTecWeb.Repository
 {
     public class AppointmentRepository : IAppointmentRepository
     {
         private readonly AppDbContext _ctx;
+
         public AppointmentRepository(AppDbContext ctx)
         {
             _ctx = ctx;
         }
 
-        public async Task AddAsync(Appointment appointment)
+        public async Task<Appointment> AddAsync(Appointment appointment)
         {
             await _ctx.appointments.AddAsync(appointment);
+            return appointment;
         }
 
         public async Task<Appointment?> GetOneAsync(Guid id)
@@ -48,16 +51,16 @@ namespace ProyectoTecWeb.Repository
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(Appointment appointment)
+        public async Task<Appointment> UpdateAsync(Appointment appointment)
         {
             _ctx.appointments.Update(appointment);
-            await Task.CompletedTask;
+            return await Task.FromResult(appointment);
         }
 
-        public async Task DeleteAsync(Appointment appointment)
+        public async Task<bool> DeleteAsync(Appointment appointment)
         {
             _ctx.appointments.Remove(appointment);
-            await Task.CompletedTask;
+            return await Task.FromResult(true);
         }
 
         public async Task SaveChangesAsync()
