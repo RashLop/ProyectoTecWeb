@@ -10,6 +10,7 @@ namespace ProyectoTecWeb.Models
         public string Specialty {get; set; } = string.Empty;
 
         public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>(); 
+        public Consultorio? Consultorio { get; set; }
 
 
     }
