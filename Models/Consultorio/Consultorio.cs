@@ -9,7 +9,7 @@ namespace ProyectoTecWeb.Models
     public string Equipment { get; set; } = string.Empty;
 
     public required Guid DoctorId { get; set; }      // FK
-    public required Doctor Doctor { get; set; }      
+    public Doctor? Doctor { get; set; }      
 }
 
 }
