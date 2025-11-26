@@ -139,9 +139,9 @@ User → Lectura y operaciones básicas permitidas
 El proyecto incluye documentación interactiva con Swagger.
 
  URL por defecto:
-
+```
 http://localhost:5020/swagger
-
+```
 
 Desde ahí se pueden:
 
