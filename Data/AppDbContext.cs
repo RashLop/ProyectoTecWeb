@@ -11,6 +11,7 @@ namespace ProyectoTecWeb.Data
         public DbSet<User> users => Set<User>();
         public DbSet<Doctor> doctors => Set<Doctor>();
         public DbSet<Appointment> appointments => Set<Appointment>();
+        public DbSet<Consultorio> consultorios => Set<Consultorio>(); 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +50,20 @@ namespace ProyectoTecWeb.Data
                     .HasForeignKey(a => a.DoctorId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<Consultorio>(c =>
+            {
+                c.HasKey(c => c.ConsultorioId);
+                c.Property(c => c.ConsultorioName).IsRequired().HasMaxLength(50);
+                c.Property(c => c.Address).IsRequired().HasMaxLength(200);
+                c.Property(c => c.Equipment).IsRequired().HasMaxLength(200);
+                // RELACIÓN 1:1
+                c.HasOne(c => c.Doctor)
+                    .WithOne(d => d.Consultorio) 
+                    .HasForeignKey<Consultorio>(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.Cascade); 
+            });
+
         }
     }
 }
