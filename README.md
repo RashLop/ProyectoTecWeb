@@ -1,7 +1,7 @@
 # TEC WEB PROYECTO 
 #  SaludTotal – Sistema de Turnos Médicos 
 
-**SaludTotal** es una API RESTful desarrollada con **ASP.NET Core 9**. Su propósito es gestionar doctores, pacientes, citas médicas, historial de cada paciente y consultorios dentro de un sistema clínico moderno.
+**SaludTotal** es una API RESTful desarrollada con **ASP.NET Core 9**. Su propósito es gestionar doctores, pacientes, citas médicas, historial clínico y consultorios dentro de un sistema clínico moderno.
 
 El objetivo es centralizar la programación de turnos y la información médica, eliminando la gestión manual y los errores frecuentes, ofreciendo una solución **segura, escalable y mantenible**.
 
@@ -47,7 +47,7 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 
 - Información básica del paciente  
 - Relación 1:1 con `User`  
-- Relación con citas médicas y diagnóstico
+- Relación con citas médicas e historial
 
 ###  Citas Médicas (Appointments)
 
@@ -70,9 +70,11 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 
 ###  Historial (History) 
 
-- Exámenes realizados  
-- Tratamiento recomendado  
-- Relación 1:1 con `Patient`  
+- **Diagnósticos:** Registro de condiciones detectadas.
+- **Medicación:** Registro de medicamentos recetados.
+- **Alergias:** Información crítica del paciente.
+- **Tipo de Sangre:** Dato inmutable del paciente.
+- Relación 1:1 con `Patient`. 
 
 ###  Consultorio
 
@@ -94,7 +96,7 @@ Basado en el modelo diseñado para **Salud Total**:
 | **Doctor**      | DoctorId, UserId, Name, Specialty, Phone                                    | Información del médico                       |
 | **Patient**     | PatientId, UserId, Name, Phone                                              | Datos del paciente                           |
 | **Appointment** | AppointmentId, DoctorId, PatientId, Date, Time, Reason, Status, Notes       | Cita médica (turno)                          |
-| **History**     | PatientId (PK), Exams, Treatment                                            | Historial del paciente                     |
+| **History**     | HistoryId, PatientId, BloodType, Diagnoses, Medication, Allergies           | Historial del paciente                       |
 | **Consultorio** | ConsultorioId, ConsultorioName, Address, Equipment                          | Consultorio asignado a un doctor             |
 
 
@@ -135,11 +137,14 @@ erDiagram
         string Notes
     }
 
-    DIAGNOSTIC {
-        guid DiagnosticId
+    HISTORY {
+        guid HistoryId
         guid PatientId
-        string Exams
-        string Treatment
+        string BloodType
+        string Diagnoses
+        string Medication
+        string Allergies
+        datetime CreatedAt
     }
 
     CONSULTORIO {
@@ -155,7 +160,7 @@ erDiagram
     DOCTOR ||--o{ APPOINTMENT : "has appointments"
     PATIENT ||--o{ APPOINTMENT : "has appointments"
 
-    PATIENT ||--o{ DIAGNOSTIC : "has diagnostic"
+    PATIENT ||--o{ HISTORY : "has history records"
     DOCTOR ||--|| CONSULTORIO : "has consultorio"
 ```
 
@@ -166,7 +171,7 @@ erDiagram
 - **Doctor – Appointment:** 1:N  
 - **Patient – Appointment:** 1:N  
 - **Doctor – Patient:** N:M **a través de Appointment**  
-- **Patient – Diagnóstico:** 1:1  
+- **Patient – History:** 1:1  
 - **Doctor – Consultorio:** 1:1  
 
 ---
@@ -227,6 +232,17 @@ User → Lectura y operaciones básicas permitidas
 | POST   | `/api/v1/Consultorio`            | Admin           | Crea un nuevo consultorio.                         |
 | PUT    | `/api/v1/Consultorio/{id}`       | Admin           | Actualiza la información de un consultorio.        |
 | DELETE | `/api/v1/Consultorio/{id}`       | Admin           | Elimina un consultorio por Id.                     |
+
+---
+
+###  History (Historial)
+
+| Método | Endpoint                          | Auth / Rol      | Descripción                                        |
+|--------|-----------------------------------|-----------------|----------------------------------------------------|
+| GET    | `/api/v1/History`                 | Autenticado     | Lista los historiales médicos.                      |
+| GET    | `/api/v1/History/{id}`            | Autenticado     | Obtiene un historial específico.                   |
+| POST   | `/api/v1/History`                 | Autebticado     | Crea un registro. Req: PatientId, BloodType (4-5 chars).|
+| PUT    | `/api/v1/History/{id}`            | Autenticado     | Actualiza Diagnóstico, Medicación o Alergias. Nota: No permite cambiar Paciente ni Tipo de Sangre.|
 
 ---
 
@@ -336,7 +352,7 @@ Esta colección contiene carpetas para:
 - **Consultorio**
 - **Appointment**
 - **Patient**
-- **Diagnostic**
+- **History**
 
 y usa **Collection Variables** (no necesitas crear Environment).
 
@@ -364,7 +380,7 @@ Clic en la colección → pestaña Variables
 | **adminUserId** | Id del usuario administrador                  | *(se completa al hacer login)*  |
 | **doctorId**    | Id del doctor creado                          | *(se completa al crear doctor)* |
 | **appointmentId** | Id de la cita creada                        | *(se completa al crear cita)*   |
-| **consultorioId** | Id del consultorio creado                   | *(se completa al crear consultorio)* |
+| **historyId** | Id del historial médico creado                  | *(se completa al crear consultorio)* |
 | **patientId**   | Id del paciente creado                        | *(se completa al crear patient)* |
 
 ---
@@ -551,7 +567,7 @@ Esto indica que el cliente debe esperar a que termine la ventana de 10 segundos 
 
 Puntos clave del desarrollo:
 
-- **Modelado de Datos Robusto:** Refleja fielmente el funcionamiento real de un entorno clínico, integrando entidades complejas (Doctores, Pacientes, Citas, Diagnósticos, Consultorio) mediante relaciones relacionales eficientes (1:1, 1:N, N:M).
+- **Modelado de Datos Robusto:** Refleja fielmente el funcionamiento real de un entorno clínico, integrando entidades complejas (Doctores, Pacientes, Citas, Historial médico, Consultorio) mediante relaciones relacionales eficientes (1:1, 1:N, N:M).
 - **Seguridad Integral:** La implementación de autenticación vía **JWT** y la autorización basada en Roles aseguran que cada recurso sea accedido únicamente por usuarios permitidos.
 - **Protección Avanzada:** La inclusión de **Rate Limiting** blinda la API contra saturación o abusos, mejorando la disponibilidad del servicio.
 - **Despliegue y Pruebas:** Con el uso de **Docker**, variables de entorno y colecciones de **Postman**, aseguramos un ciclo de desarrollo y despliegue consistente y repetible.
