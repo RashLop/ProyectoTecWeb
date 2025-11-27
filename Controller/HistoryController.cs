@@ -27,7 +27,8 @@ namespace ProyectoTecWeb.Controller
                 if (data is null) return NotFound();
                 return Ok(data);
             }
-
+            [Authorize]
+            [HttpGet]
             public async Task<IActionResult> GetAll()
             {
                 IEnumerable<HistoryResponse> items = await _service.GetAllHistories();

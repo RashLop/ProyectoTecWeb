@@ -12,7 +12,6 @@ namespace ProyectoTecWeb.Controllers
     public class PatientController: ControllerBase
     {
         
-       
             private readonly IPatientService _pat;
 
             public PatientController(IPatientService pat)
