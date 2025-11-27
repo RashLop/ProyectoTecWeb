@@ -9,7 +9,7 @@
         public ICollection<string>? Medication { get; set; }
         public ICollection<string>? Allergies { get; set; }
 
-        public Patient? patient { get; set; }
+        public Patient? Patient { get; set; }
         public Guid PatientId { get; set; }
 
 

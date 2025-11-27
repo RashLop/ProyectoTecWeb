@@ -69,8 +69,8 @@ namespace ProyectoTecWeb.Data
                     .HasMaxLength(10);
 
                 // Relaci�n:1-1
-                h.HasOne(h => h.patient)
-                    .WithMany()
+                h.HasOne(h => h.Patient)
+                    .WithMany(p => p.Histories)
                     .HasForeignKey(h => h.PatientId) 
                     .OnDelete(DeleteBehavior.Cascade);
 
