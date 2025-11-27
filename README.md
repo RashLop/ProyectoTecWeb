@@ -201,7 +201,7 @@ http://localhost:5020
 
 ---
 
-## 📦 8. Datos de Prueba (Demo)
+##  8. Datos de Prueba (Demo)
 
 | Email           | Password   | Rol  |
 |-----------------|-----------|-------|
@@ -210,6 +210,199 @@ http://localhost:5020
 
 ---
 
-## 🧪 9. Pruebas en Postman
+##  9. Pruebas en Postman
+
+### 9.1 Importar colección de Postman
+
+En el repositorio se incluye una colección de Postman para probar la API de **Salud Total**:
+
+ **Archivo:**  
+`docs/postman/SaludTotal.postman_collection.json`
+
+Esta colección contiene carpetas para:
+
+- **Auth** (Register, Login, Refresh, Logout)
+- **Doctor**
+- **Consultorio**
+- **Appointment**
+- **Patient**
+- **Diagnostic**
+
+y usa **Collection Variables** (no necesitas crear Environment).
+
+#### Pasos para usarla
+
+1. Abrir **Postman**
+2. Clic en **Import**
+3. Seleccionar el archivo:
+
+   ```text
+   docs/postman/SaludTotal.postman_collection.json
+Verás una colección llamada: Salud Total – API
+
+Opcionalmente, puedes revisar/editar las variables de la colección en:
+
+Clic en la colección → pestaña Variables
+
+### 9.2 Variables principales usadas
+
+| Variable        | Descripción                                   | Valor por defecto               |
+|-----------------|-----------------------------------------------|---------------------------------|
+| **baseUrl**     | URL base de la API                            | `http://localhost:5020`         |
+| **token**       | Access Token (JWT)                            | *(se completa al hacer login)*  |
+| **refreshToken**| Refresh Token                                 | *(se completa al hacer login)*  |
+| **adminUserId** | Id del usuario administrador                  | *(se completa al hacer login)*  |
+| **doctorId**    | Id del doctor creado                          | *(se completa al crear doctor)* |
+| **appointmentId** | Id de la cita creada                        | *(se completa al crear cita)*   |
+| **consultorioId** | Id del consultorio creado                   | *(se completa al crear consultorio)* |
+| **patientId**   | Id del paciente (cuando la entidad exista)    | *(puede colocarse manualmente)* |
+
+---
+
+### 9.3  Flujo recomendado de pruebas
+
+#### **1) Auth → Register (Administrador)**  
+- **Request:** `Auth / 01. Register Admin`  
+- **Endpoint:** `POST {{baseUrl}}/api/v1/Auth/register`
+
+Se registra un usuario con rol **Admin** (solo la primera vez).
+
+---
+
+#### **2) Auth → Login**
+- **Request:** `Auth / 02. Login Admin`  
+- **Endpoint:** `POST {{baseUrl}}/api/v1/Auth/login`
+
+Si el login es correcto, la colección guarda automáticamente:
+
+- `token`
+- `refreshToken`
+- `adminUserId`
+
+---
+
+#### **3) Uso de Bearer Token**
+
+La colección ya está configurada para enviar:
+````
+Authorization: Bearer {{token}}
+````
+
+Por lo tanto, **no necesitas configurar nada manualmente** después de iniciar sesión.
+
+---
+
+### 9.4  Pruebas de entidades principales
+
+---
+
+##  Doctor
+
+### **Crear Doctor**
+- **Request:** `Doctor / 01. Create Doctor (1:1 con User)`
+- **Endpoint:** `POST {{baseUrl}}/api/v1/Doctor`
+
+Usa:
+
+- `userId = {{adminUserId}}`
+
+Al crear el doctor, la colección guarda:
+
+- `doctorId`
+
+### **Listar Doctores**
+- **Request:** `Doctor / 02. Get All Doctors`
+- **Endpoint:** `GET {{baseUrl}}/api/v1/Doctor`
+
+---
+
+##  Consultorio
+
+### **Crear Consultorio**
+- **Request:** `Consultorio / 01. Create Consultorio`
+- **Endpoint:** `POST {{baseUrl}}/api/v1/Consultorio`
+
+Campos:
+
+- `consultorioName`
+- `address`
+- `equipment`
+
+Se guarda automáticamente:
+
+- `consultorioId`
+
+### **Listar Consultorios**
+- **Request:** `Consultorio / 02. Get All Consultorios`
+- **Endpoint:** `GET {{baseUrl}}/api/v1/Consultorio`
+
+---
+
+##  Appointment (Citas médicas)
+
+La entidad Appointment representa la relación **N:M entre Doctor y Patient**.
+
+### **Crear Cita**
+- **Request:** `Appointment / 01. Create Appointment`
+- **Endpoint:** `POST {{baseUrl}}/api/v1/Appointment`
+
+Requiere:
+
+- `doctorId`
+- `patientId`
+- `date`
+- `time`
+- `reason`
+
+Se guarda automáticamente:
+
+- `appointmentId`
+
+### **Listar todas las citas**
+- **Request:** `Appointment / 02. Get All Appointments`
+- **Endpoint:** `GET {{baseUrl}}/api/v1/Appointment`
+
+### (Opcional) Filtros
+- **Por Doctor:** `GET /api/v1/Appointment/doctor/{doctorId}`
+- **Por Paciente:** `GET /api/v1/Appointment/patient/{patientId}`
+
+---
+
+### 9.5 Validación de resultados
+
+#### **Códigos HTTP esperados**
+
+| Operación                    | Status esperado |
+|------------------------------|-----------------|
+| Register Admin               | `201 Created`   |
+| Login Admin                  | `200 OK`        |
+| Crear Doctor                 | `201 Created`   |
+| Listar Doctores              | `200 OK`        |
+| Crear Consultorio            | `201 Created`   |
+| Listar Consultorios          | `200 OK`        |
+| Crear Cita                   | `201 Created`   |
+| Listar Citas                 | `200 OK`        |
+
+---
+
+###  Relaciones validadas en Postman
+
+- El doctor creado aparece correctamente en la lista.
+- El consultorio se registra y aparece en las consultas.
+- Las citas muestran correctamente:
+  - `doctorId`
+  - `patientId`
+- Las relaciones lógicas se cumplen:
+
+#### **Doctor**
+- puede tener muchas citas (1:N)
+
+#### **Patient**
+- puede tener muchas citas (1:N)
+
+#### **Doctor ↔ Patient**
+- relación **N:M**, representada por la tabla **Appointment**
+
+---
 
 
