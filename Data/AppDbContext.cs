@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using ProyectoTecWeb.Models;
+using ProyectoTecWeb.Models.History;
 using ProyectoTecWeb.Models.Patient;
 
 namespace ProyectoTecWeb.Data
@@ -14,6 +15,8 @@ namespace ProyectoTecWeb.Data
         public DbSet<Appointment> appointments => Set<Appointment>();
 
         public DbSet<Patient> patients => Set<Patient>();
+
+        public DbSet<History> histories => Set<History>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,6 +77,39 @@ namespace ProyectoTecWeb.Data
                     .HasForeignKey(a => a.PatientId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+            modelBuilder.Entity<History>(h =>
+            {
+                h.HasKey(h => h.HistoryID);
+                h.Property(h => h.BloodType)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                // Relación:1-1
+                h.HasOne(h => h.patient)
+                    .WithOne()
+                    .HasForeignKey<History>("PatientId") 
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Configure collections as JSON columns
+                h.Property(h => h.Diagnoses)
+                    .HasConversion(
+                        v => string.Join(',', v ?? new List<string>()),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                    );
+                h.Property(h => h.Medication)
+                    .HasConversion(
+                        v => string.Join(',', v ?? new List<string>()),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                    );
+
+                h.Property(h => h.Allergies)
+                    .HasConversion(
+                        v => string.Join(',', v ?? new List<string>()),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                    );
+            });
+
+
         }
     }
 }
