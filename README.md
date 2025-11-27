@@ -365,7 +365,7 @@ Clic en la colección → pestaña Variables
 | **doctorId**    | Id del doctor creado                          | *(se completa al crear doctor)* |
 | **appointmentId** | Id de la cita creada                        | *(se completa al crear cita)*   |
 | **consultorioId** | Id del consultorio creado                   | *(se completa al crear consultorio)* |
-| **patientId**   | Id del paciente (cuando la entidad exista)    | *(puede colocarse manualmente)* |
+| **patientId**   | Id del paciente creado                        | *(se completa al crear patient)* |
 
 ---
 
