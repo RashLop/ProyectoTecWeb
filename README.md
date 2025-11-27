@@ -217,7 +217,9 @@ http://localhost:5020
 En el repositorio se incluye una colección de Postman para probar la API de **Salud Total**:
 
  **Archivo:**  
-`docs/postman/SaludTotal.postman_collection.json`
+````
+docs/postman/SaludTotal.postman_collection.json
+````
 
 Esta colección contiene carpetas para:
 
@@ -433,5 +435,17 @@ HTTP 429 Too Many Requests
 ````
 Esto indica que el cliente debe esperar a que termine la ventana de 10 segundos antes de seguir haciendo peticiones.
 
+---
 
+## 11. Conclusión Final
+
+**Salud Total** se consolida como una API moderna, segura y diseñada profesionalmente. Gracias a su **Arquitectura por Capas**, logramos una clara separación de responsabilidades (Controladores, Servicios, Repositorios, DTOs), lo que garantiza un código limpio, fácil de mantener y preparado para escalar.
+
+Puntos clave del desarrollo:
+
+- **Modelado de Datos Robusto:** Refleja fielmente el funcionamiento real de un entorno clínico, integrando entidades complejas (Doctores, Pacientes, Citas, Diagnósticos, Consultorio) mediante relaciones relacionales eficientes (1:1, 1:N, N:M).
+- **Seguridad Integral:** La implementación de autenticación vía **JWT** y la autorización basada en Roles aseguran que cada recurso sea accedido únicamente por usuarios permitidos.
+- **Protección Avanzada:** La inclusión de **Rate Limiting** blinda la API contra saturación o abusos, mejorando la disponibilidad del servicio.
+- **Despliegue y Pruebas:** Con el uso de **Docker**, variables de entorno y colecciones de **Postman**, aseguramos un ciclo de desarrollo y despliegue consistente y repetible.
+ 
 
