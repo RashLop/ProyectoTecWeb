@@ -8,6 +8,7 @@ using ProyectoTecWeb.Repository;
 using ProyectoTecWeb.Services;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -36,6 +37,17 @@ builder.Services.AddCors(opt =>
         .AllowAnyOrigin()
         .AllowAnyHeader()
         .AllowAnyMethod());
+});
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.Window = TimeSpan.FromSeconds(10);
+        opt.PermitLimit = 5;
+        opt.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
 });
 
 builder.Services
@@ -100,6 +112,8 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IConsultorioRepository, ConsultorioRepository>(); 
+builder.Services.AddScoped<IConsultorioService, ConsultorioService>(); 
 
 var app = builder.Build();
 

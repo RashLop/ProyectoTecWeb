@@ -13,7 +13,6 @@ namespace ProyectoTecWeb.Models.DTO
         [Required, MaxLength(25), MinLength(8)]
         //[RegularExpression("^[aA-zZ]")]
         public required string Password { get; init;  }
-        public required string phone {get; init; }
         [Required]
         public string Role { get; set; } = "User";
     }
