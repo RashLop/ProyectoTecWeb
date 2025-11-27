@@ -1,7 +1,7 @@
 # TEC WEB PROYECTO 
 #  SaludTotal – Sistema de Turnos Médicos 
 
-**SaludTotal** es una API RESTful desarrollada con **ASP.NET Core 9**. Su propósito es gestionar doctores, pacientes, citas médicas, diagnósticos y consultorios dentro de un sistema clínico moderno.
+**SaludTotal** es una API RESTful desarrollada con **ASP.NET Core 9**. Su propósito es gestionar doctores, pacientes, citas médicas, historial de cada paciente y consultorios dentro de un sistema clínico moderno.
 
 El objetivo es centralizar la programación de turnos y la información médica, eliminando la gestión manual y los errores frecuentes, ofreciendo una solución **segura, escalable y mantenible**.
 
@@ -43,7 +43,7 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 - Eliminar doctor  
 - Relación 1:1 con `User`
 
-###  Pacientes 
+###  Pacientes (Patient)
 
 - Información básica del paciente  
 - Relación 1:1 con `User`  
@@ -68,7 +68,7 @@ El sistema sigue una **Arquitectura por Capas (Layered Architecture)** para sepa
 > Pero conceptualmente define una relación **N:M entre Doctor y Patient**:
 > un doctor puede atender a muchos pacientes y un paciente puede ser atendido por muchos doctores, y cada encuentro se representa con una cita.
 
-###  Diagnóstico 
+###  Historial (History) 
 
 - Exámenes realizados  
 - Tratamiento recomendado  
@@ -94,7 +94,7 @@ Basado en el modelo diseñado para **Salud Total**:
 | **Doctor**      | DoctorId, UserId, Name, Specialty, Phone                                    | Información del médico                       |
 | **Patient**     | PatientId, UserId, Name, Phone                                              | Datos del paciente                           |
 | **Appointment** | AppointmentId, DoctorId, PatientId, Date, Time, Reason, Status, Notes       | Cita médica (turno)                          |
-| **Diagnostic**  | PatientId (PK), Exams, Treatment                                            | Diagnóstico del paciente                     |
+| **History**     | PatientId (PK), Exams, Treatment                                            | Historial del paciente                     |
 | **Consultorio** | ConsultorioId, ConsultorioName, Address, Equipment                          | Consultorio asignado a un doctor             |
 
 
