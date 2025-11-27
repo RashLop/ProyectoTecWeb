@@ -97,6 +97,68 @@ Basado en el modelo diseñado para **Salud Total**:
 | **Diagnostic**  | PatientId (PK), Exams, Treatment                                            | Diagnóstico del paciente                     |
 | **Consultorio** | ConsultorioId, ConsultorioName, Address, Equipment                          | Consultorio asignado a un doctor             |
 
+
+```mermaid
+erDiagram
+    USER {
+        guid Id
+        string Username
+        string Email
+        string Password
+        string Phone
+        string Role
+    }
+
+    DOCTOR {
+        guid DoctorId
+        guid UserId
+        string Name
+        string Specialty
+        string Phone
+    }
+
+    PATIENT {
+        guid PatientId
+        guid UserId
+        string Name
+        string Phone
+    }
+
+    APPOINTMENT {
+        guid AppointmentId
+        guid DoctorId
+        guid PatientId
+        date Date
+        time Time
+        string Reason
+        int Status
+        string Notes
+    }
+
+    DIAGNOSTIC {
+        guid DiagnosticId
+        guid PatientId
+        string Exams
+        string Treatment
+    }
+
+    CONSULTORIO {
+        guid ConsultorioId
+        string ConsultorioName
+        string Address
+        string Equipment
+    }
+
+    USER ||--|| DOCTOR : "is doctor"
+    USER ||--|| PATIENT : "is patient"
+
+    DOCTOR ||--o{ APPOINTMENT : "has appointments"
+    PATIENT ||--o{ APPOINTMENT : "has appointments"
+
+    PATIENT ||--o{ DIAGNOSTIC : "has diagnostic"
+    DOCTOR ||--|| CONSULTORIO : "has consultorio"
+```
+
 ### Relaciones
 
 - **User – Doctor:** 1:1  
