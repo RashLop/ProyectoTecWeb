@@ -8,11 +8,11 @@ namespace ProyectoTecWeb.Services
     public interface IPatientService
     {
         Task<PatientResponse> GetOnePatient(Guid id);
-        Task<IEnumerable<PatientResponse>> GetAllDoctors();
+        Task<IEnumerable<PatientResponse>> GetAllPatients();
 
-        Task<Patient> CreateDoctor(CreatePatientDto dto);
+        Task<Patient> CreatePatient(CreatePatientDto dto);
 
-        Task<Patient> UpdateDoctor(UpdatePatientDto dto, Guid id);
+        Task<Patient> UpdatePatient(UpdatePatientDto dto, Guid id);
 
         Task Delete(Guid id);
     }
