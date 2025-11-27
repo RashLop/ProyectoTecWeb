@@ -133,6 +133,52 @@ User → Lectura y operaciones básicas permitidas
 
 ##  5. EndPoints Principales
 
+### Auth (Autenticación y Autorización)
+
+| Método | Endpoint                     | Auth / Rol     | Descripción                                      |
+|--------|------------------------------|----------------|--------------------------------------------------|
+| POST   | `/api/v1/Auth/register`      | Público        | Registra un nuevo usuario (Admin o User).        |
+| POST   | `/api/v1/Auth/login`         | Público        | Inicia sesión y devuelve AccessToken + Refresh.  |
+| POST   | `/api/v1/Auth/refresh`       | Público        | Renueva el AccessToken usando el RefreshToken.   |
+| POST   | `/api/v1/Auth/logout`        | Autenticado    | Cierra sesión y revoca el refresh token activo.  |
+
+---
+
+###  Doctor
+
+| Método | Endpoint                     | Auth / Rol      | Descripción                                      |
+|--------|------------------------------|-----------------|--------------------------------------------------|
+| GET    | `/api/v1/Doctor`             | Autenticado     | Lista todos los doctores.                        |
+| GET    | `/api/v1/Doctor/{id}`        | Autenticado     | Obtiene el detalle de un doctor por su Id.       |
+| POST   | `/api/v1/Doctor`             | Admin           | Crea un nuevo doctor asociado a un User.         |
+| PUT    | `/api/v1/Doctor/{id}`        | Admin           | Actualiza los datos de un doctor existente.      |
+| DELETE | `/api/v1/Doctor/{id}`        | Admin           | Elimina un doctor por su Id.                     |
+
+---
+
+###  Consultorio
+
+| Método | Endpoint                          | Auth / Rol      | Descripción                                        |
+|--------|-----------------------------------|-----------------|----------------------------------------------------|
+| GET    | `/api/v1/Consultorio`            | Autenticado     | Lista todos los consultorios.                      |
+| GET    | `/api/v1/Consultorio/{id}`       | Autenticado     | Obtiene el detalle de un consultorio por Id.       |
+| POST   | `/api/v1/Consultorio`            | Admin           | Crea un nuevo consultorio.                         |
+| PUT    | `/api/v1/Consultorio/{id}`       | Admin           | Actualiza la información de un consultorio.        |
+| DELETE | `/api/v1/Consultorio/{id}`       | Admin           | Elimina un consultorio por Id.                     |
+
+---
+
+###  Appointment (Citas médicas)
+
+| Método | Endpoint                               | Auth / Rol      | Descripción                                                |
+|--------|----------------------------------------|-----------------|------------------------------------------------------------|
+| GET    | `/api/v1/Appointment`                  | Autenticado     | Lista todas las citas médicas.                             |
+| GET    | `/api/v1/Appointment/{id}`             | Autenticado     | Obtiene el detalle de una cita por Id.                     |
+| POST   | `/api/v1/Appointment`                  | Autenticado     | Crea una nueva cita (requiere `DoctorId` y `PatientId`).   |
+| PUT    | `/api/v1/Appointment/{id}`             | Autenticado     | Actualiza los datos de una cita existente.                 |
+| DELETE | `/api/v1/Appointment/{id}`             | Admin           | Elimina una cita por Id.                                   |
+| GET*   | `/api/v1/Appointment/doctor/{doctorId}`| Autenticado     | (Opcional) Lista citas filtradas por doctor.               |
+| GET*   | `/api/v1/Appointment/patient/{patientId}`| Autenticado   | (Opcional) Lista citas filtradas por paciente.             |
 
 ---
 
