@@ -54,6 +54,7 @@ namespace ProyectoTecWeb.Services
             consultorio.ConsultorioName = dto.ConsultorioName;
             consultorio.Address = dto.Address; 
             consultorio.DoctorId = dto.DoctorId; 
+            consultorio.Equipment = dto.Equipment; 
             await _repo.UpadteAsync(consultorio); 
             return consultorio; 
         }

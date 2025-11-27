@@ -57,7 +57,6 @@ namespace ProyectoTecWeb.Services
                 Password = hashedPassword, 
                 UserName = dto.Username, 
                 Role = dto.Role,
-                Phone = dto.phone
             }; 
             await _users.AddAsync(user); 
             return user.Id.ToString(); 
