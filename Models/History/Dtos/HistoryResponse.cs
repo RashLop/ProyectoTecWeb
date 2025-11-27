@@ -5,10 +5,16 @@ namespace ProyectoTecWeb.Models.DTO
     public class HistoryResponse
     {
         public Guid HistoryId { get; set; }
+
         public Guid PatientId { get; set; }
-        [Required, MaxLength(5), MinLength(4)]
+
         public string BloodType { get; set; } = string.Empty;
 
+        public string Diagnoses { get; set; } = string.Empty;
+
+        public string Medication { get; set; } = string.Empty;
+
+        public string Allergies { get; set; } = string.Empty;
 
     }
 }

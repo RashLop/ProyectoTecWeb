@@ -63,34 +63,16 @@ namespace ProyectoTecWeb.Data
 
             modelBuilder.Entity<History>(h =>
             {
-                h.HasKey(h => h.HistoryID);
-                h.Property(h => h.BloodType)
-                    .IsRequired()
-                    .HasMaxLength(10);
-
+                h.HasKey(x => x.HistoryID);
+                h.Property(x => x.BloodType).IsRequired().HasMaxLength(5);
+                h.Property(x => x.Diagnoses).IsRequired().HasMaxLength(500);
+                h.Property(x => x.Medication).IsRequired().HasMaxLength(500);
+                h.Property(x => x.Allergies).IsRequired().HasMaxLength(500);
                 // Relaci�n:1-1
                 h.HasOne(h => h.Patient)
                     .WithMany(p => p.Histories)
                     .HasForeignKey(h => h.PatientId) 
                     .OnDelete(DeleteBehavior.Cascade);
-
-                // Configure collections as JSON columns
-                h.Property(h => h.Diagnoses)
-                    .HasConversion(
-                        v => string.Join(',', v ?? new List<string>()),
-                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-                    );
-                h.Property(h => h.Medication)
-                    .HasConversion(
-                        v => string.Join(',', v ?? new List<string>()),
-                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-                    );
-
-                h.Property(h => h.Allergies)
-                    .HasConversion(
-                        v => string.Join(',', v ?? new List<string>()),
-                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-                    );
                     
             });
             modelBuilder.Entity<Consultorio>(c =>

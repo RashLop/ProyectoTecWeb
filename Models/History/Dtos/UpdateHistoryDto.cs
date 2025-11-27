@@ -3,7 +3,13 @@
 namespace ProyectoTecWeb.Models.DTO{
     public class UpdateHistoryDto
     {
-        [Required, MaxLength(5), MinLength(4)]
-        public string BloodType { get; set; } = string.Empty;
+        [Required]
+        public string Diagnoses { get; set; } = string.Empty;
+
+        [Required]
+        public string Medication { get; set; } = string.Empty;
+
+        [Required]
+        public string Allergies { get; set; } = string.Empty;
     }
 }

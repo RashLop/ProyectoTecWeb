@@ -1,4 +1,5 @@
-﻿using ProyectoTecWeb.Models;
+﻿using System.Xml;
+using ProyectoTecWeb.Models;
 using ProyectoTecWeb.Models.DTO;
 using ProyectoTecWeb.Repositories;
 using ProyectoTecWeb.Repository;
@@ -17,6 +18,9 @@ namespace ProyectoTecWeb.Services
             var history = new History {
                 HistoryID = Guid.NewGuid(),
                 BloodType = dto.BloodType,
+                Diagnoses = dto.Diagnoses,
+                Medication = dto.Medication,
+                Allergies = dto.Allergies,
                 PatientId = dto.PatientId
             };
             await _repo.AddAsync(history);
@@ -43,7 +47,11 @@ namespace ProyectoTecWeb.Services
         {
             var updated = await _repo.GetOneAsync(id);
             if (updated == null) throw new ArgumentException("Medical History not Found");
+            updated.Diagnoses = dto.Diagnoses;
+            updated.Medication = dto.Medication;
+            updated.Allergies = dto.Allergies; 
             await _repo.UpdateAsync(updated);
+            await _repo.SaveChangesAsync(); 
             return updated;
         }
 
@@ -54,7 +62,10 @@ namespace ProyectoTecWeb.Services
             {
                 HistoryId = histories.HistoryID,
                 PatientId = histories.PatientId,
-                BloodType = histories.BloodType
+                BloodType = histories.BloodType,
+                Diagnoses = histories.Diagnoses, 
+                Medication = histories.Medication, 
+                Allergies = histories.Allergies
             }
             );
             return response;
