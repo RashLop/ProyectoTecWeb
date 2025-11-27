@@ -405,4 +405,33 @@ Se guarda automáticamente:
 
 ---
 
+## 10. TimeGate (Rate Limiting)
+
+El proyecto **Salud Total** implementa un sistema de **Rate Limiting** usando el middleware de `AspNetCore.RateLimiting`.  
+Este mecanismo protege la API de abuso, evitando que un mismo cliente envíe demasiadas solicitudes en muy poco tiempo.
+
+En `Program.cs` se configura un limitador de ventana fija llamado **"fixed"**.
+
+### Configuración efectiva
+Esta API implementa una política de límite de tasa para prevenir abusos y garantizar la estabilidad del servicio.
+
+| Parámetro | Valor | Descripción |
+| :--- | :--- | :--- |
+| **Policy Name** | `"fixed"` | Nombre identificador del limitador registrado en el sistema. |
+| **Tipo** | Fixed Window | Algoritmo de ventana fija. Cuenta las solicitudes en un bloque de tiempo estático. |
+| **Ventana de tiempo** | 10 segundos | El contador de solicitudes se reinicia cada 10 segundos. |
+| **Solicitudes permitidas** | 5 | Se permiten máximo 5 solicitudes directas por ventana de tiempo. |
+| **Cola (QueueLimit)** | 2 | Si se supera el límite, hasta 2 solicitudes adicionales pueden quedar en espera. |
+| **Orden de cola** | `OldestFirst` | Las solicitudes que llevan más tiempo en la cola se procesan primero. |
+| **Respuesta al exceder** | `HTTP 429` | Si se llenan el límite y la cola, la API retorna el estado *Too Many Requests*. |
+
+### Comportamiento cuando se excede el límite
+Si un cliente envía más de 5 solicitudes (y se llenan las 2 de cola) dentro de los mismos 10 segundos, la API responde:
+
+````
+HTTP 429 Too Many Requests
+````
+Esto indica que el cliente debe esperar a que termine la ventana de 10 segundos antes de seguir haciendo peticiones.
+
+
 
