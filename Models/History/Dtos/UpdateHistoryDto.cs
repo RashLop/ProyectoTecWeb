@@ -2,10 +2,9 @@
 
 namespace ProyectoTecWeb.Models.History.Dtos
 {
-    public class CreateHistoryDto
+    public class UpdateHistoryDto
     {
-        public Guid PatientId { get; set; }
         [Required, MaxLength(5), MinLength(4)]
-        public string BloodType { get; set; }=string.Empty;
+        public string BloodType { get; set; } = string.Empty;
     }
 }
