@@ -9,6 +9,8 @@ using ProyectoTecWeb.Services;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore.Migrations;
+using ProyectoTecWeb.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -114,6 +116,10 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IConsultorioRepository, ConsultorioRepository>(); 
 builder.Services.AddScoped<IConsultorioService, ConsultorioService>(); 
+builder.Services.AddScoped<IHistoriesRepository,HistoriesRepository>(); 
+builder.Services.AddScoped<IHistoryService, HistoryService>(); 
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();  
 
 var app = builder.Build();
 

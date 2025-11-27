@@ -1,3 +1,5 @@
+using ProyectoTecWeb.Models;
+
 namespace ProyectoTecWeb.Models
 {
     public class Doctor
@@ -11,6 +13,7 @@ namespace ProyectoTecWeb.Models
 
         public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>(); 
         public Consultorio? Consultorio { get; set; }
+
 
 
     }
