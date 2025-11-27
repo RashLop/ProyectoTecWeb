@@ -5,10 +5,9 @@ namespace ProyectoTecWeb.Services
 {
     public interface IHistoryService
     {
-        Task<HistoryResponse?> GetOne(Guid id);
-        Task<IEnumerable<HistoryResponse>> GetAll();
-        Task<HistoryResponse> CreateAppointment(CreateHistoryDto dto);
-        Task<HistoryResponse?> Update(Guid id, UpdateHistoryDto dto);
+        Task<History?> GetOne(Guid id);
+        Task<History> CreateHistory(CreateHistoryDto dto);
+        Task<History> Update(Guid id, UpdateHistoryDto dto);
         Task Delete(Guid id);
     }
 }

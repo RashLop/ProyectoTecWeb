@@ -10,7 +10,7 @@ namespace ProyectoTecWeb.Models.History
         public ICollection<string>? Medication { get; set; }
         public ICollection<string>? Allergies { get; set; }
 
-        required public ProyectoTecWeb.Models.Patient.Patient patient { get; set; }
+        public ProyectoTecWeb.Models.Patient.Patient patient { get; set; }
         public Guid PatientId { get; set; }
 
 
