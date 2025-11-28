@@ -198,7 +198,7 @@ User → Lectura y operaciones básicas permitidas
 
 ---
 
-##  5. EndPoints Principales
+##  5. EndPoints
 
 ### Auth (Autenticación y Autorización)
 
@@ -255,8 +255,6 @@ User → Lectura y operaciones básicas permitidas
 | POST   | `/api/v1/Appointment`                  | Autenticado     | Crea una nueva cita (requiere `DoctorId` y `PatientId`).   |
 | PUT    | `/api/v1/Appointment/{id}`             | Autenticado     | Actualiza los datos de una cita existente.                 |
 | DELETE | `/api/v1/Appointment/{id}`             | Admin           | Elimina una cita por Id.                                   |
-| GET*   | `/api/v1/Appointment/doctor/{doctorId}`| Autenticado     | (Opcional) Lista citas filtradas por doctor.               |
-| GET*   | `/api/v1/Appointment/patient/{patientId}`| Autenticado   | (Opcional) Lista citas filtradas por paciente.             |
 
 ---
 
