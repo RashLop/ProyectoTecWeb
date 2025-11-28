@@ -1,4 +1,4 @@
-# TEC WEB PROYECTO 
+# TEC WEB PROYECTO - Grupo 6
 #  SaludTotal – Sistema de Turnos Médicos 
 
 **SaludTotal** es una API RESTful desarrollada con **ASP.NET Core 9**. Su propósito es gestionar doctores, pacientes, citas médicas, historial clínico y consultorios dentro de un sistema clínico moderno.
