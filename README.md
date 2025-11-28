@@ -361,8 +361,8 @@ y usa **Collection Variables** (no necesitas crear Environment).
 3. Seleccionar el archivo:
 
    ```text
-   docs/postman/SaludTotal.postman_collection.json
-Verás una colección llamada: Salud Total – API
+   docs/postman/Salud Total-API .postman_collectionF.json
+Verás una colección llamada: Salud Total – API(FIXED)
 
 Opcionalmente, puedes revisar/editar las variables de la colección en:
 
@@ -378,8 +378,10 @@ Clic en la colección → pestaña Variables
 | **adminUserId** | Id del usuario administrador                  | *(se completa al hacer login)*  |
 | **doctorId**    | Id del doctor creado                          | *(se completa al crear doctor)* |
 | **appointmentId** | Id de la cita creada                        | *(se completa al crear cita)*   |
-| **historyId** | Id del historial médico creado                  | *(se completa al crear consultorio)* |
+| **historyId** | Id del historial médico creado                  | *(se completa al crear historial)* |
 | **patientId**   | Id del paciente creado                        | *(se completa al crear patient)* |
+| **consultorioId** | Id del consultorio creado                   | *(se completa al crear consultorio)* |
+| **tempUserId**   | Id del user creado                          | *(se completa al hacer registeruser)* |
 
 ---
 
@@ -485,10 +487,6 @@ Se guarda automáticamente:
 ### **Listar todas las citas**
 - **Request:** `Appointment / 02. Get All Appointments`
 - **Endpoint:** `GET {{baseUrl}}/api/v1/Appointment`
-
-### (Opcional) Filtros
-- **Por Doctor:** `GET /api/v1/Appointment/doctor/{doctorId}`
-- **Por Paciente:** `GET /api/v1/Appointment/patient/{patientId}`
 
 ---
 
