@@ -16,11 +16,13 @@ namespace ProyectoTecWeb.Controllers
         {
             _service = service;
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
             var id = await _service.RegisterAsync(dto);
-            return CreatedAtAction(nameof(Register), new { id = id , message = "Usuario creado"} );
+            return CreatedAtAction(nameof(Register), new { id }, new { id = id, message = "Usuario creado" });
+            
         }
 
         [HttpPost("login")]
