@@ -364,8 +364,7 @@ y usa **Collection Variables** (no necesitas crear Environment).
    ```text
    docs/postman/Salud Total-API .postman_collectionF.json
    o SaludTotal – API.postman_collection.json
-Verás una colección llamada: Salud Total – API(FIXED)
-                             ,Salud Total - API
+Verás una colección llamada: Salud Total – API(FIXED), Salud Total - API
                              
 Opcionalmente, puedes revisar/editar las variables de la colección en:
 
