@@ -20,15 +20,33 @@ namespace ProyectoTecWeb.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
             var id = await _service.RegisterAsync(dto);
-            return CreatedAtAction(nameof(Register), new { id }, null);
+            return CreatedAtAction(nameof(Register), new { id = id , message = "Usuario creado"} );
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
-            var (ok, response) = await _service.LoginAsync(dto);
-            if (!ok || response is null) return Unauthorized();
-            return Ok(response);
+            
+            try
+            {
+                var (ok, response) = await _service.LoginAsync(dto);
+                if (!ok || response is null) return Unauthorized(new { message = "Invalid credentials", code = 401 });
+                return Ok(response); 
+            }
+            catch (ArgumentException ex)
+            {
+                if (ex.Message.Contains("Email"))
+                return NotFound(new { message = ex.Message, code = 404 });
+
+                if (ex.Message.Contains("Password"))
+                return Unauthorized(new { message = ex.Message, code = 401 });
+
+                return BadRequest(new { message = ex.Message, code = 400 });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "Internal server error", code = 500 });
+            }
         }
 
         [HttpPost("refresh")]

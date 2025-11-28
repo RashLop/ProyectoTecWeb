@@ -23,44 +23,77 @@ namespace ProyectoTecWeb.Controller
             [HttpGet("{id:guid}")]
             public async Task<IActionResult> GetOne(Guid id)
             {
-                var data = await _service.GetOne(id);
-                if (data is null) return NotFound();
+                try{
+                    var data = await _service.GetOne(id);
+                    if (data is null) return NotFound();
                 return Ok(data);
+                }catch(ArgumentException ex)
+                {
+                    return NotFound(new {message=ex.Message, code =404}); 
+                }catch (Exception){
+                    return StatusCode(500, new {message = "Internal Server error", code=500}); 
+                }
             }
             [Authorize]
             [HttpGet]
             public async Task<IActionResult> GetAll()
             {
-                IEnumerable<HistoryResponse> items = await _service.GetAllHistories();
-                return Ok(items);
+                try{
+                    IEnumerable<HistoryResponse> items = await _service.GetAllHistories();
+                    return Ok(items);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, new { message = "Internal server error", code = 500 });
+                }
             }
 
             [Authorize(Policy = "AdminOnly")]
             [HttpPost]
             public async Task<IActionResult> Create([FromBody] CreateHistoryDto dto)
-            {
-                if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        {
+            if (!ModelState.IsValid) return ValidationProblem(ModelState); 
 
+            try
+            {
                 var created = await _service.CreateHistory(dto);
-                return CreatedAtAction(nameof(GetOne), new { id = created.HistoryID }, created);
+                return CreatedAtAction(nameof(GetOne),new { id = created.HistoryID },created); 
             }
+            catch (Exception){
+                return StatusCode(500, new { message = "Error creating medical history", code = 500 });
+            }
+
+        }
 
             [Authorize]
             [HttpPut("{id:guid}")]
             public async Task<IActionResult> Update(Guid id, [FromBody] UpdateHistoryDto dto)
-            {
-                var updated = await _service.Update(id, dto);
-                if (updated is null) return NotFound();
+        {
+            if (!ModelState.IsValid) return ValidationProblem(ModelState); 
 
-                return CreatedAtAction(nameof(GetOne), new { id = updated.HistoryID }, updated);
+            try
+            {
+            var updated = await _service.Update(id, dto);
+            return Ok(updated); // ✅ 200  (PUT = 200)
             }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message, code = 404 });
+            }catch (Exception){
+            return StatusCode(500, new { message = "Error updating medical history", code = 500 });
+            }
+        }
 
             [Authorize(Policy = "AdminOnly")]
             [HttpDelete("{id:guid}")]
             public async Task<IActionResult> Delete(Guid id)
             {
-                await _service.Delete(id);
-                return NoContent();
+                try{
+                    await _service.Delete(id);
+                    return NoContent();
+                }catch (ArgumentException ex){
+                    return NotFound(new { message = ex.Message, code = 404 });
+                }
             }
         
     }

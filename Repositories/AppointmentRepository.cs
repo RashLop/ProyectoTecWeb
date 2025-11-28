@@ -66,5 +66,15 @@ namespace ProyectoTecWeb.Repository
         {
             await _ctx.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsSameTime(Guid doctorId, Guid patientId, DateTime date, TimeSpan time)
+        {
+            return await _ctx.appointments.AnyAsync(a =>
+                a.Date == date &&
+                a.Time == time &&
+                (a.DoctorId == doctorId || a.PatientId == patientId)
+            );
+
+        }
     }
 }

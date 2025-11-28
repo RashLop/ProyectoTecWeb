@@ -23,8 +23,16 @@ namespace ProyectoTecWeb.Controllers
             [HttpGet("{id:guid}")]
             public async Task<IActionResult> GetOnePatient(Guid id)
             {
+                try{
+
                 var patient = await _pat.GetOnePatient(id);
                 return Ok(patient);
+                }catch(ArgumentException ex)
+                {
+                    return NotFound(new {message=ex.Message, code =404}); 
+                }catch (Exception){
+                    return StatusCode(500, new {message = "Internal Server error", code=500}); 
+                }
             }
 
             [Authorize(Policy = "AdminOnly")]
@@ -32,15 +40,26 @@ namespace ProyectoTecWeb.Controllers
             public async Task<IActionResult> CreatePatient([FromBody] CreatePatientDto dto)
             {
                 if (!ModelState.IsValid) return ValidationProblem(ModelState);
-                var created = await _pat.CreatePatient(dto);
-                return CreatedAtAction(nameof(GetOnePatient), new { id = created.PatientId }, created);
+                
+                try{
+                    var created = await _pat.CreatePatient(dto);
+                    return CreatedAtAction(nameof(GetOnePatient), new { id = created.PatientId }, created);
+                }catch (Exception){
+                    return StatusCode(500, new { message = "Error creating medical history", code = 500 });
+                }
+
             }
             [Authorize]
             [HttpGet]
             public async Task<IActionResult> GetAll()
             {
-                IEnumerable<PatientResponse> items = await _pat.GetAllPatients();
-                return Ok(items);
+                try{
+                    IEnumerable<PatientResponse> items = await _pat.GetAllPatients();
+                    return Ok(items);
+                }catch (Exception)
+                {
+                    return StatusCode(500, new { message = "Internal server error", code = 500 });
+                }
             }
 
             [Authorize(Policy = "AdminOnly")]
@@ -56,8 +75,12 @@ namespace ProyectoTecWeb.Controllers
             [HttpDelete("{id:guid}")]
             public async Task<IActionResult> Delete(Guid id)
             {
-                await _pat.Delete(id);
-                return NoContent();
+                try{
+                    await _pat.Delete(id);
+                    return NoContent();
+                }catch (ArgumentException ex){
+                    return NotFound(new { message = ex.Message, code = 404 });
+                }
             }
     }
 }

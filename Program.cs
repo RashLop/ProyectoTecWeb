@@ -123,6 +123,12 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Request:{ context.Request.Method}");
+    await next();  
+}); 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

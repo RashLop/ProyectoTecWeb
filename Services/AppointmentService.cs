@@ -15,6 +15,10 @@ namespace ProyectoTecWeb.Services
 
         public async Task<AppointmentResponseDto> CreateAppointment(CreateAppointmentDto dto)
         {
+            var exists = await _repo.ExistsSameTime(dto.DoctorId, dto.PatientId, dto.Date.Date, dto.Time);
+            if (exists)
+                throw new ArgumentException("Doctor or patient already has an appointment at this time");
+
             var appointment = new Appointment
             {
                 AppointmentId = Guid.NewGuid(),
@@ -66,7 +70,6 @@ namespace ProyectoTecWeb.Services
             appointment.Reason = dto.Reason;
             appointment.Status = dto.Status;
             appointment.Notes = dto.Notes;
-
             await _repo.UpdateAsync(appointment);
             await _repo.SaveChangesAsync();
 

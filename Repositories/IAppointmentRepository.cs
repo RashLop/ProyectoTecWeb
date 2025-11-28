@@ -13,5 +13,8 @@ namespace ProyectoTecWeb.Repository
         Task<Appointment> UpdateAsync(Appointment appointment);
         Task<bool> DeleteAsync(Appointment appointment);
         Task SaveChangesAsync();
+
+        Task<bool> ExistsSameTime(Guid doctorId, Guid patientId, DateTime date, TimeSpan time);
+
     }
 }
