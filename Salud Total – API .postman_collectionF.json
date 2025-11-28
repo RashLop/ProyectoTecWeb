@@ -1,0 +1,960 @@
+{
+	"info": {
+		"_postman_id": "e455abf8-26a3-4a1e-98d9-98a634347b13",
+		"name": "Salud Total – API (FIXED)",
+		"description": "Coleccion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47611891"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "01. Register Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201 Created', function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"AdminMaster\",\n  \"email\": \"AdminM0@gmail.com\",\n  \"password\": \"P@ssw0rd\",\n  \"role\": \"Admin\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Status 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// 1. Capturar el TOKEN (Con el error ortográfico 'acessToken')",
+									"if (data.token && data.token.acessToken) {",
+									"    pm.collectionVariables.set(\"token\", data.token.acessToken);",
+									"    console.log(\"✅ Token guardado correctamente (acessToken)\");",
+									"} ",
+									"else {",
+									"    console.error(\"❌ No se encontró 'acessToken'. Revisa el Body.\");",
+									"}",
+									"",
+									"// 2. Capturar el ID del Admin",
+									"if (data.user && data.user.id) {",
+									"    pm.collectionVariables.set(\"adminUserId\", data.user.id);",
+									"    console.log(\"✅ Admin ID guardado\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"AdminM0@gmail.com\",\n  \"password\": \"P@ssw0rd\"\n} "
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03. Register User (Para Paciente)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"if(jsonData && jsonData.id) {",
+									"    pm.collectionVariables.set(\"tempUserId\", jsonData.id);",
+									"    console.log(\"✅ tempUserId guardado: \" + jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"PacienteUser\",\r\n  \"email\": \"paciente5@gmail.com\",\r\n  \"password\": \"User1234!\",\r\n  \"role\": \"User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04. Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200 OK', function(){",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.collectionVariables.set('token', '');",
+									"pm.collectionVariables.set('refreshToken', '');",
+									"console.log('🚪 Logout: tokens limpiados (collection)');"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Auth",
+								"logout"
+							]
+						},
+						"description": "Cierra sesión del usuario actual (invalida el refresh token)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Doctor",
+			"item": [
+				{
+					"name": "01. Create Doctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201 Created', function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"if (json && json.doctorId) {",
+									"  pm.collectionVariables.set('doctorId', json.doctorId);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{adminUserId}}\",\n  \"name\": \"Dr. House\",\n  \"phone\": \"70000002\",\n  \"specialty\": \"Diagnóstico\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Doctor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Doctors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Doctor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Doctor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patient",
+			"item": [
+				{
+					"name": "01. Create Patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"if(jsonData && jsonData.patientId) {",
+									"    pm.collectionVariables.set(\"patientId\", jsonData.patientId);",
+									"    console.log(\"✅ patientId guardado\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{tempUserId}}\", \n  \"name\": \"Pepe Antezana\",\n  \"phone\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Patient",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Patient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Patient",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Patient",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Patient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03. Get One Patient",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Patient/{{patientId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Patient",
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04. Update Patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validar que la API responda éxito (200 OK o 201 Created)\r",
+									"pm.test(\"Status code is 200 or 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+									"});\r",
+									"\r",
+									"// Opcional: Ver en consola qué respondió el servidor\r",
+									"try {\r",
+									"    var data = pm.response.json();\r",
+									"    console.log(\" Respuesta del Update:\", data);\r",
+									"} catch (e) {\r",
+									"    console.warn(\"El servidor no devolvió JSON (esto es normal si dio 204 No Content)\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Pepe Roberto\",\r\n    \"Phone\": \"7777777\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Patient/{{patientId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Patient",
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05. Delete Patient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Patient/{{patientId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Patient",
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "01. Create Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"if(jsonData && jsonData.appointmentId) {",
+									"    pm.collectionVariables.set(\"appointmentId\", jsonData.appointmentId);",
+									"    console.log(\"✅ appointmentId guardado\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"doctorId\": \"{{doctorId}}\",\r\n  \"patientId\": \"{{patientId}}\",\r\n  \"date\": \"2025-11-30T00:00:00Z\",\r\n  \"time\": \"10:30:00\",\r\n  \"reason\": \"Dolor de cabeza\",\r\n  \"status\": 0,\r\n  \"notes\": \"Primera visita\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Appointment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Appointment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Appointments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Appointment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Appointment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03. Get One Appointment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Appointment/{{appointmentId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Appointment",
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04. Update Appointment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"doctorId\": \"{{doctorId}}\",\r\n  \"patientId\": \"{{patientId}}\",\r\n  \"date\": \"2025-12-01\",\r\n  \"time\": \"11:00:00\",\r\n  \"reason\": \"Chequeo reprogramado\",\r\n  \"status\": 1,\r\n  \"notes\": \"Reprogramado por paciente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Appointment/{{appointmentId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Appointment",
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05. Delete Appointment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Appointment/{{appointmentId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Appointment",
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consultorio",
+			"item": [
+				{
+					"name": "01. Create Consultorio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData && jsonData.consultorioId) {",
+									"    pm.collectionVariables.set(\"consultorioId\", jsonData.consultorioId);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctorId\": \"{{doctorId}}\", \n  \"consultorioName\": \"Consultorio Central\",\n  \"address\": \"Calle 123\",\n  \"equipment\": \"Básico\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Consultorio",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Consultorio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Consultorio",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/Consultorio",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Consultorio"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "History",
+			"item": [
+				{
+					"name": "01. Create History",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"console.log(\"🔥 JSON Recibido:\", data);",
+									"",
+									"// Aquí está el cambio: buscamos exactamente \"historyID\"",
+									"if (data.historyID) {",
+									"    pm.collectionVariables.set(\"historyId\", data.historyID);",
+									"    console.log(\"✅ ID guardado correctamente: \" + data.historyID);",
+									"} ",
+									"else if (data.historyId) {",
+									"    pm.collectionVariables.set(\"historyId\", data.historyId);",
+									"    console.log(\"✅ ID guardado (camelCase estándar)\");",
+									"}",
+									"else if (data.id) {",
+									"    pm.collectionVariables.set(\"historyId\", data.id);",
+									"    console.log(\"✅ ID guardado (id simple)\");",
+									"}",
+									"else {",
+									"    console.error(\"❌ NO SE ENCONTRÓ EL ID. Revisa el nombre del campo en la consola.\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"patientId\": \"{{patientId}}\",\r\n  \"bloodType\": \"O Rh+\",\r\n  \"diagnoses\": \"Gripe Estacional\",\r\n  \"medication\": \"Paracetamol 500mg\",\r\n  \"allergies\": \"Ninguna\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/History",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"History"
+							]
+						},
+						"description": "Crea historial para el paciente creado anteriormente."
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/History",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"History"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03. Get One History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/History/{{historyId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"History",
+								"{{historyId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04. Update History",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"diagnoses\": \"Gripe Severa\",\r\n  \"medication\": \"Ibuprofeno 400mg\",\r\n  \"allergies\": \"Polen\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/History/{{historyId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"History",
+								"{{historyId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5020"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "adminUserId",
+			"value": ""
+		},
+		{
+			"key": "tempUserId",
+			"value": ""
+		},
+		{
+			"key": "doctorId",
+			"value": ""
+		},
+		{
+			"key": "patientId",
+			"value": ""
+		},
+		{
+			"key": "historyId",
+			"value": ""
+		},
+		{
+			"key": "consultorioId",
+			"value": ""
+		},
+		{
+			"key": "appointmentId",
+			"value": ""
+		}
+	]
+}

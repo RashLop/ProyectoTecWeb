@@ -1,0 +1,506 @@
+{
+	"info": {
+		"_postman_id": "db9e4c28-2f9e-402e-b1e3-19efd6fd64f8",
+		"name": "Salud Total – API",
+		"description": "Colección de pruebas para la API Salud Total (Auth, Doctor, Appointment, Consultorio). Usa collection variables.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "47611891"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "01. Register Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201 Created', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"// Solo verificamos que se creó el admin."
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"AdminMaster\",\n  \"email\": \"Admin@gmail.com\",\n  \"password\": \"P@ssw0rd\",\n  \"phone\": \"70000001\",\n  \"role\": \"Admin\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/Auth/register",
+						"description": "Registra un usuario administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "02. Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let data = {};",
+									"",
+									"try {",
+									"  data = pm.response.json();",
+									"} catch (e) {",
+									"  console.log('No JSON response');",
+									"}",
+									"",
+									"pm.test('Status 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Esperamos algo tipo LoginResponseDto { user, token, refreshToken }",
+									"",
+									"if (data.token && (data.token.AcessToken || data.token.acessToken)) {",
+									"  const access = data.token.AcessToken || data.token.acessToken;",
+									"  pm.collectionVariables.set('token', access);",
+									"  console.log('✅ Access token guardado (collection)');",
+									"}",
+									"",
+									"if (data.refreshToken && data.refreshToken.refreshToken) {",
+									"  pm.collectionVariables.set('refreshToken', data.refreshToken.refreshToken);",
+									"  console.log('✅ Refresh token guardado (collection)');",
+									"}",
+									"",
+									"if (data.user && data.user.id) {",
+									"  pm.collectionVariables.set('adminUserId', data.user.id);",
+									"  console.log('✅ adminUserId guardado (collection)');",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"Admin@gmail.com\",\n  \"password\": \"P@ssw0rd\"\n} "
+						},
+						"url": "{{baseUrl}}/api/v1/Auth/login",
+						"description": "Hace login del admin y guarda tokens en collection variables."
+					},
+					"response": []
+				},
+				{
+					"name": "03. Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200 OK', function(){",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let data = {};",
+									"try {",
+									"  data = pm.response.json();",
+									"} catch (e) {",
+									"  console.log('No JSON response');",
+									"}",
+									"",
+									"if (data.token && (data.token.AcessToken || data.token.acessToken)) {",
+									"  const access = data.token.AcessToken || data.token.acessToken;",
+									"  pm.collectionVariables.set('token', access);",
+									"  console.log('🔄 Nuevo access token guardado (collection)');",
+									"}",
+									"",
+									"if (data.refreshToken && data.refreshToken.refreshToken) {",
+									"  pm.collectionVariables.set('refreshToken', data.refreshToken.refreshToken);",
+									"  console.log('🔄 Nuevo refresh token guardado (collection)');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/Auth/refresh",
+						"description": "Renueva el AccessToken usando el RefreshToken actual."
+					},
+					"response": []
+				},
+				{
+					"name": "04. Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200 OK', function(){",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.collectionVariables.set('token', '');",
+									"pm.collectionVariables.set('refreshToken', '');",
+									"console.log('🚪 Logout: tokens limpiados (collection)');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/api/v1/Auth/logout",
+						"description": "Cierra sesión del usuario actual (invalida el refresh token)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Doctor",
+			"item": [
+				{
+					"name": "01. Create Doctor (1:1 con User)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201 Created', function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"if (json && json.doctorId) {",
+									"  pm.collectionVariables.set('doctorId', json.doctorId);",
+									"  console.log('✅ doctorId guardado (collection)');",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{adminUserId}}\",\n  \"name\": \"Dr. Juan Pérez\",\n  \"phone\": \"70000002\",\n  \"specialty\": \"Cardiology\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/Doctor",
+						"description": "Crea un doctor asociado al usuario Admin (demo)."
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Doctors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200 OK', function(){",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"pm.test('Es un array de doctores', function(){",
+									"  pm.expect(json).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/api/v1/Doctor",
+						"description": "Lista todos los doctores."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "01. Create Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201 Created', function(){",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"if (json && json.appointmentId) {",
+									"  pm.collectionVariables.set('appointmentId', json.appointmentId);",
+									"  console.log('✅ appointmentId guardado (collection)');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctorId\": \"{{doctorId}}\",\n  \"patientId\": \"{{patientId}}\",\n  \"date\": \"2025-11-30\",\n  \"time\": \"10:30:00\",\n  \"reason\": \"Routine check-up\",\n  \"status\": 0,\n  \"notes\": \"First visit\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/Appointment",
+						"description": "Crea una nueva cita médica entre un doctor y un paciente."
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Appointments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200 OK', function(){",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"pm.test('Es un array de citas', function(){",
+									"  pm.expect(json).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/api/v1/Appointment",
+						"description": "Obtiene todas las citas del sistema."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consultorio",
+			"item": [
+				{
+					"name": "01. Create Consultorio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201 Created', function(){",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"if (json && json.consultorioId) {",
+									"  pm.collectionVariables.set('consultorioId', json.consultorioId);",
+									"  console.log('✅ consultorioId guardado (collection)');",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctorId\": \"{{doctorId}}\", \n  \"consultorioName\": \"Consultorio 3B\",\n  \"address\": \"Av. Blanco Galindo #1234\",\n  \"equipment\": \"Camilla, Tensiómetro, Estetoscopio\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/Consultorio",
+						"description": "Crea un nuevo consultorio médico."
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get All Consultorios",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200 OK', function(){",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"pm.test('Es un array de consultorios', function(){",
+									"  pm.expect(json).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/api/v1/Consultorio",
+						"description": "Obtiene todos los consultorios."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5020"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": ""
+		},
+		{
+			"key": "adminUserId",
+			"value": ""
+		},
+		{
+			"key": "doctorId",
+			"value": ""
+		},
+		{
+			"key": "appointmentId",
+			"value": ""
+		},
+		{
+			"key": "consultorioId",
+			"value": ""
+		},
+		{
+			"key": "patientId",
+			"value": ""
+		}
+	]
+}
