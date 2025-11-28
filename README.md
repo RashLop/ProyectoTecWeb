@@ -198,7 +198,7 @@ User → Lectura y operaciones básicas permitidas
 
 ---
 
-##  5. EndPoints Principales
+##  5. EndPoints
 
 ### Auth (Autenticación y Autorización)
 
