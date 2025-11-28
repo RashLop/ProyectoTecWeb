@@ -340,7 +340,7 @@ En el repositorio se incluye una colección de Postman para probar la API de **S
 
  **Archivo:**  
 ````
-docs/postman/SaludTotal.postman_collection.json
+docs/postman/Salud Total-API .postman_collectionF.json
 ````
 
 Esta colección contiene carpetas para:
