@@ -14,6 +14,6 @@ namespace ProyectoTecWeb.Services
 
         Task Delete(Guid id);
 
-        Task <PatientResponse>GetByName(string name);
+        Task <IEnumerable<Patient>>GetByName(string name);
     }
 }
