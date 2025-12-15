@@ -1,14 +1,15 @@
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using ProyectoTecWeb.Models;
+using ProyectoTecWeb.Models.Dto;
+using ProyectoTecWeb.Models.DTO;
+using ProyectoTecWeb.Repository;
+using Sprache;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
-using ProyectoTecWeb.Models;
-using ProyectoTecWeb.Models.DTO;
-using ProyectoTecWeb.Repository;
-using Sprache;
 namespace ProyectoTecWeb.Services
 {
     public class AuthService : IAuthService
@@ -60,6 +61,14 @@ namespace ProyectoTecWeb.Services
             }; 
             await _users.AddAsync(user); 
             return user.Id.ToString(); 
+        }
+        public async Task<string> ForgotPassword(ForgotPasswordDto dto)
+        {
+            var user = await _users.GetByEmailAddress(dto.Email);
+            if (user is null) throw new ArgumentException("Email doesnt exist");
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            await _users.UpdateAsync(user);
+            return "Success"; 
         }
 
         public async Task<(bool ok, LoginResponseDto? response)> RefreshAsync(RefreshRequestDto dto)

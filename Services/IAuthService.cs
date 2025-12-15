@@ -1,4 +1,6 @@
+
 using ProyectoTecWeb.Models.DTO;
+
 
 namespace ProyectoTecWeb.Services
 {
@@ -9,5 +11,7 @@ namespace ProyectoTecWeb.Services
         Task<(bool ok, LoginResponseDto? response)> RefreshAsync(RefreshRequestDto dto);
 
         Task<bool> LogoutAsync(string email);
+
+        Task<string> ForgotPassword(ForgotPasswordDto dto );
     }
 }
