@@ -12,6 +12,6 @@ namespace ProyectoTecWeb.Services
 
         Task<bool> LogoutAsync(string email);
 
-        Task<string> ForgotPassword(ForgotPasswordDto dto );
+        Task ForgotPassword(ForgotPasswordDto dto );
     }
 }

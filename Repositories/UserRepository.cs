@@ -23,5 +23,7 @@ namespace ProyectoTecWeb.Repository
 
         public Task<User?> GetByRefreshToken(string refreshToken) =>
             _db.users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+
+        public Task<User?> GetByUsername(string username) => _db.users.FirstOrDefaultAsync(u => u.UserName == username);
     }
 }

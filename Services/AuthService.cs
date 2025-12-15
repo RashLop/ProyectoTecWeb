@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using ProyectoTecWeb.Models;
-using ProyectoTecWeb.Models.Dto;
 using ProyectoTecWeb.Models.DTO;
 using ProyectoTecWeb.Repository;
 using Sprache;
@@ -62,13 +61,14 @@ namespace ProyectoTecWeb.Services
             await _users.AddAsync(user); 
             return user.Id.ToString(); 
         }
-        public async Task<string> ForgotPassword(ForgotPasswordDto dto)
+        public async Task ForgotPassword(ForgotPasswordDto dto)
         {
+            var name = await _users.GetByUsername(dto.Username);
+            if (name is null) throw new ArgumentException("Username doesnt exist");
             var user = await _users.GetByEmailAddress(dto.Email);
             if (user is null) throw new ArgumentException("Email doesnt exist");
             user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
             await _users.UpdateAsync(user);
-            return "Success"; 
         }
 
         public async Task<(bool ok, LoginResponseDto? response)> RefreshAsync(RefreshRequestDto dto)
