@@ -68,7 +68,7 @@ namespace ProyectoTecWeb.Services
         }
         public async Task<PatientResponse> GetByName(string name)
         {
-            var pat =await _patientRepository.GetByNameAsync(name)
+            var pat = await _patientRepository.GetByNameAsync(name);
                 return pat;
 
         }
