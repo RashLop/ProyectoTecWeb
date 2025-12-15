@@ -84,7 +84,7 @@ namespace ProyectoTecWeb.Controllers
         }
 
         [Authorize]
-        [HttpGet("{Name:string}")]
+        [HttpGet("getfemalepatients")]
         public async Task<IActionResult> GetByName(string Name)
         {
             return Ok(await _pat.GetByName(Name));

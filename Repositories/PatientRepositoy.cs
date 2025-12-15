@@ -40,7 +40,7 @@ namespace ProyectoTecWeb.Repositories
         public async Task<IEnumerable<Patient>>GetByNameAsync(string name)
         {
            return await _ctx.patients.
-                Where(p => p.Name == name).ToListAsync();
+                Where(p => p.Name.EndsWith("a")).ToListAsync();
 
         }
     }
