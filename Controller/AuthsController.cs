@@ -72,7 +72,7 @@ namespace ProyectoTecWeb.Controllers
             return Ok(new { message = "Logged out successfully" });
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
         {
             try
