@@ -41,14 +41,12 @@ namespace ProyectoTecWeb.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-            try {
                 var created = await _pat.CreatePatient(dto);
                 return CreatedAtAction(nameof(GetOnePatient), new { id = created.PatientId }, created);
-            } catch (Exception) {
-                return StatusCode(500, new { message = "Error creating medical history", code = 500 });
-            }
+           
 
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
