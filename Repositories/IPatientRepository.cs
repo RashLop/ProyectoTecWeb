@@ -12,5 +12,7 @@ namespace ProyectoTecWeb.Repositories
         Task<IEnumerable<Patient>> GetAllPatientsAsync();
 
         Task SaveChangesAsync();
+
+        Task <IEnumerable<Patient>> GetByNameAsync(string Name);
     }
 }

@@ -66,5 +66,12 @@ namespace ProyectoTecWeb.Services
             if (byebye == null) throw new ArgumentException("Patient not in Database");
             await _patientRepository.DeleteAsync(byebye);
         }
+        public async Task<PatientResponse> GetByName(string name)
+        {
+            var pat =await _patientRepository.GetByNameAsync(name)
+                return pat;
+
+        }
+
     }
 }
