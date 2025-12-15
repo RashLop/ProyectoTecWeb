@@ -22,26 +22,26 @@ namespace ProyectoTecWeb.Controllers
         {
             var id = await _service.RegisterAsync(dto);
             return CreatedAtAction(nameof(Register), new { id }, new { id = id, message = "Usuario creado" });
-            
+
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
-            
+
             try
             {
                 var (ok, response) = await _service.LoginAsync(dto);
                 if (!ok || response is null) return Unauthorized(new { message = "Invalid credentials", code = 401 });
-                return Ok(response); 
+                return Ok(response);
             }
             catch (ArgumentException ex)
             {
                 if (ex.Message.Contains("Email"))
-                return NotFound(new { message = ex.Message, code = 404 });
+                    return NotFound(new { message = ex.Message, code = 404 });
 
                 if (ex.Message.Contains("Password"))
-                return Unauthorized(new { message = ex.Message, code = 401 });
+                    return Unauthorized(new { message = ex.Message, code = 401 });
 
                 return BadRequest(new { message = ex.Message, code = 400 });
             }
@@ -72,5 +72,19 @@ namespace ProyectoTecWeb.Controllers
             return Ok(new { message = "Logged out successfully" });
         }
 
+        [HttpPatch]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+        {
+            try
+            {
+                await _service.ForgotPassword(dto);
+                return Ok(new { message = "Password Updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
+        }
     }
 }

@@ -12,16 +12,16 @@ namespace ProyectoTecWeb.Repositories
         }
 
         public Task<Patient?> GetPatient(Guid id) => _ctx.patients.FirstOrDefaultAsync(x => x.PatientId == id);
-        public async Task AddAsync(Patient patient) 
+        public async Task AddAsync(Patient patient)
         {
-            await _ctx.patients.AddAsync(patient); 
+            await _ctx.patients.AddAsync(patient);
         }
 
-        public async Task<Patient?> UpdateAsync(Patient patient) 
+        public async Task<Patient?> UpdateAsync(Patient patient)
         {
             _ctx.patients.Update(patient);
             await _ctx.SaveChangesAsync();
-            return  patient;
+            return patient;
         }
         public async Task DeleteAsync(Patient patient)
         {
