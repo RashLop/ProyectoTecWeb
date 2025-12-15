@@ -37,6 +37,11 @@ namespace ProyectoTecWeb.Repositories
             await _ctx.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Patient>>GetByNameAsync(string name)
+        {
+           return await _ctx.patients.
+                Where(p => p.Name == name).ToListAsync();
 
+        }
     }
 }
